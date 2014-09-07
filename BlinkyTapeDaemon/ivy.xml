@@ -10,7 +10,9 @@
         <dependency org="org.eclipse.jetty" name="jetty-server" rev="9.0.5.v20130815" conf="*->default"/>
         <dependency org="org.eclipse.jetty" name="jetty-webapp" rev="9.0.5.v20130815" conf="*->default"/>
         <dependency org="javax.servlet" name="javax.servlet-api" rev="3.0.1" conf="*->default"/>
-        <dependency org="com.sun.jersey" name="jersey-bundle" rev="1.14" conf="*->default"/>
+        
+        <dependency org="org.glassfish.jersey.containers" name="jersey-container-servlet-core" rev="2.12" conf="*->default"/>
+        
         <dependency org="org.json" name="json" rev="20140107" conf="*->default"/>
         <dependency org="asm" name="asm" rev="3.3.1" conf="*->default"/>
         <dependency org="org.slf4j" name="slf4j-api" rev="1.7.7" conf="*->default" />

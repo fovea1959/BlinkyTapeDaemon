@@ -14,11 +14,13 @@ import org.json.JSONObject;
  
 @Path("/ftocservice")
 public class FtoCService {
- 
+	static private boolean DEBUG = false;
+
       @GET
       @Produces("application/json")
       public Response convertFtoC() throws JSONException {
- 
+      	if (DEBUG) new Exception("got here!").printStackTrace();
+
         JSONObject jsonObject = new JSONObject();
         Double fahrenheit = 98.24;
         Double celsius;
@@ -34,7 +36,8 @@ public class FtoCService {
       @GET
       @Produces("application/json")
       public Response convertFtoCfromInput(@PathParam("f") float f) throws JSONException {
- 
+      	if (DEBUG) new Exception("got here!").printStackTrace();
+
         JSONObject jsonObject = new JSONObject();
         float celsius;
         celsius =  (f - 32)*5/9;

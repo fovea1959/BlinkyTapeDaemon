@@ -28,6 +28,9 @@ public class EmbeddedServer {
         // add SLF4JBridgeHandler to j.u.l's root logger, should be done once during
         // the initialization phase of your application
         SLF4JBridgeHandler.install();
+		
+        // not sure if this is necessary
+        java.util.logging.Logger.getLogger("org.glassfish.jersey.servlet").setLevel(java.util.logging.Level.ALL);
         
 		Server server = new Server();
 

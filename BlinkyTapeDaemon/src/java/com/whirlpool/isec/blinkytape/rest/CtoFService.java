@@ -11,9 +11,12 @@ import javax.ws.rs.Produces;
  
 @Path("/ctofservice")
 public class CtoFService {
+	static private boolean DEBUG = false;
+	
     @GET
     @Produces("application/xml")
     public String convertCtoF() {
+    	if (DEBUG) new Exception("got here!").printStackTrace();
  
         Double fahrenheit;
         Double celsius = 36.8;
@@ -27,6 +30,7 @@ public class CtoFService {
     @GET
     @Produces("application/xml")
     public String convertCtoFfromInput(@PathParam("c") Double c) {
+    	if (DEBUG) new Exception("got here!").printStackTrace();
         Double fahrenheit;
         Double celsius = c;
         fahrenheit = ((celsius * 9) / 5) + 32;

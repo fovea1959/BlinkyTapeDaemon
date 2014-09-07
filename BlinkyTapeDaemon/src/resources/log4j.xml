@@ -29,7 +29,11 @@
     </layout>
   </appender>
   
-  <logger name="org.springframework">
+  <logger name="org.eclipse.jetty">
+   <level value="INFO"/>
+  </logger>
+   
+  <logger name="org.glassfish.jersey">
    <level value="DEBUG"/>
   </logger>
    
