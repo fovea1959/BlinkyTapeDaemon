@@ -4,8 +4,6 @@ package com.whirlpool.isec.blinkytape.rest;
  * @author Crunchify.com
  */
 
-import java.awt.Color;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -30,9 +28,11 @@ public class BService {
     logger.info("s={}, color={}, delay={}", s, colorParam, delay);
     if (colorParam != null) {
       EmbeddedServer.cylon.setColor(colorParam);
+      EmbeddedServer.doubleBar.setColor(colorParam);
     }
     if (delay != null) {
       EmbeddedServer.cylon.setDelay(delay);
+      EmbeddedServer.doubleBar.setDelay(delay);
     }
     return "<bservice>" + EmbeddedServer.cylon + "</bservice>";
   }

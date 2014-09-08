@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 
 import javax.ws.rs.WebApplicationException;
 
+@SuppressWarnings("serial")
 public class ColorParam extends Color {
   public ColorParam(String s) {
     super(getRGB(s));

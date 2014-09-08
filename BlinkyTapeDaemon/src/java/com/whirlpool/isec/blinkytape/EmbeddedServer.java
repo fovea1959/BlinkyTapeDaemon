@@ -16,6 +16,7 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 
 public class EmbeddedServer {
   public static Cylon cylon = null;
+  public static DoubleBar doubleBar = null;
 
   /**
    * @param args
@@ -70,14 +71,16 @@ public class EmbeddedServer {
     }
 
     cylon = new Cylon();
-    Thread cylonThread = new Thread(cylon);
+    doubleBar = new DoubleBar();
+    Thread tapeThread = new Thread(doubleBar);
 
-    cylonThread.start();
+    tapeThread.start();
 
     try {
       System.in.read();
       cylon.setDieFlag(true);
-      cylonThread.join();
+      doubleBar.setDieFlag(true);
+      tapeThread.join();
       server.stop();
       server.join();
     } catch (Exception e) {
