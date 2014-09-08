@@ -16,6 +16,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 public class EmbeddedServer {
+	public static Cylon cylon = null;
 
 	/**
 	 * @param args
@@ -69,8 +70,16 @@ public class EmbeddedServer {
 				e.printStackTrace();
 			}
 		}
+		
+		cylon = new Cylon();
+		Thread cylonThread = new Thread(cylon);
+		
+		cylonThread.start();
+		
 		try {
 			System.in.read();
+			cylonThread.stop();
+			cylonThread.join();
 			server.stop();
 			server.join();
 		} catch (Exception e) {
