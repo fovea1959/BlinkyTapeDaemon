@@ -6,6 +6,11 @@ import jssc.SerialPortException;
 
 public class Cylon implements Runnable {
 	private Color color = new Color(200, 128, 128);
+	private boolean dieFlag = false;
+
+	public void setDieFlag(boolean dieFlag) {
+		this.dieFlag = dieFlag;
+	}
 
 	public Color getColor() {
 		return color;
@@ -49,6 +54,7 @@ public class Cylon implements Runnable {
 				} catch (InterruptedException ex) {
 					
 				}
+				if (dieFlag) break;
 			}
 		} catch (SerialPortException ex) {
 			ex.printStackTrace();

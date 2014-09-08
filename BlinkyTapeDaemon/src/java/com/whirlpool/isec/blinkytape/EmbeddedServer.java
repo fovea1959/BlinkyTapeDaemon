@@ -78,7 +78,7 @@ public class EmbeddedServer {
 		
 		try {
 			System.in.read();
-			cylonThread.stop();
+			cylon.setDieFlag(true);
 			cylonThread.join();
 			server.stop();
 			server.join();
