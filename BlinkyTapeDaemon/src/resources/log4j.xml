@@ -34,12 +34,16 @@
 		<level value="DEBUG" />
 	</logger>
 
-	<logger name="com.whirlpool.isec.blinkytape.Cylon">
+	<logger name="com.whirlpool.isec.blinkytape">
 		<level value="DEBUG"></level>
 	</logger>
 
-	<logger name="com.whirlpool.isec.blinkytape.BlinkyTape">
-		<level value="DEBUG"></level>
+	<logger name="com.whirlpool.isec.blinkytape.EmbeddedServer">
+		<level value="INFO"></level>
+	</logger>
+
+	<logger name="com.whirlpool.isec.blinkytape.DoubleBar">
+		<level value="INFO"></level>
 	</logger>
 
 	<root>

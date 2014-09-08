@@ -40,28 +40,34 @@ public class DoubleBar implements Runnable {
 
       boolean goingup = true;
       int spot = 0;
+      int limit = tape.getLength() / 2;
 
       while (true) {
         long t0 = System.currentTimeMillis();
 
         if (goingup) {
-          if (spot >= tape.getLength() - 1) {
+          if (spot >= limit - 1) {
             goingup = false;
             spot--;
           } else {
             spot++;
           }
         } else {
-          if (spot <= 0) {
+          if (spot < 0) {
             spot++;
             goingup = true;
           } else {
             spot--;
           }
         }
+        logger.debug("spot = {}/{}", spot, limit);
         
-        for (int i = 0; i < tape.getLength(); i++) {
-          tape.setColor(i, (i < spot ? color : Color.black));
+      
+        for (int i = 0; i < limit; i++) {
+          tape.setColor(i, (i <= spot ? color : Color.black));
+        }
+        for (int i = limit; i < limit + limit; i++) {
+          tape.setColor(i, (i <= spot + limit ? color : Color.black));
         }
         long t1 = System.currentTimeMillis();
         tape.updateTape();
