@@ -30,7 +30,8 @@ public class BlinkyTape {
 
   public void updateTape() throws SerialPortException {
     long fiddleTime = 0;
-    long sendTime = 0;
+    byte[] bytes = new byte[length*3];
+    int bindex = 0;
     for (int i = 0; i < length; i++) {
       long t0  = System.currentTimeMillis();
       Color c = leds[i];
@@ -45,22 +46,20 @@ public class BlinkyTape {
       // Send the color for the current LED to the strip,
       // being careful not to send 255 (because that would
       // cause the strip to display the pixels
-      long t1  = System.currentTimeMillis();
+      
+      bytes[bindex++] = bc(r);
+      bytes[bindex++] = bc(g);
+      bytes[bindex++] = bc(b);
 
-      serialPort.writeByte(bc(r));
-      serialPort.writeByte(bc(g));
-      serialPort.writeByte(bc(b));
-      
-      long t2 = System.currentTimeMillis();
-      
+      long t1  = System.currentTimeMillis();
       fiddleTime += (t1 - t0);
-      sendTime += (t2 - t0);
     }
     long t0 = System.currentTimeMillis();
+    serialPort.writeBytes(bytes);
     triple255();
     long t1 = System.currentTimeMillis();
-    long triple255Time = t1 - t0;
-    logger.debug ("update breakdown: fiddling={}, sending={}, t255={}", fiddleTime, sendTime, triple255Time);
+    long sendTime = t1 - t0;
+    logger.debug ("update breakdown: fiddling={}, sending={}", fiddleTime, sendTime);
   }
 
   public void close() throws SerialPortException {
