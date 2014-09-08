@@ -1,5 +1,7 @@
 package com.whirlpool.isec.blinkytape.eventqueue;
 
-public class EventQueue {
+import java.util.PriorityQueue;
+
+public class EventQueue extends PriorityQueue<EventQueueEntryImpl>{
 
 }

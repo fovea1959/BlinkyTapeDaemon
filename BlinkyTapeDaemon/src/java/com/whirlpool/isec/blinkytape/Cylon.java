@@ -2,12 +2,23 @@ package com.whirlpool.isec.blinkytape;
 
 import java.awt.Color;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jssc.SerialPortException;
 
 public class Cylon implements Runnable {
+  static Logger logger = LoggerFactory.getLogger(Cylon.class);
+
   private Color color = new Color(200, 128, 128);
 
   private boolean dieFlag = false;
+
+  private Integer delay = 100;
+
+  public void setDelay(Integer delay) {
+    this.delay = delay;
+  }
 
   public void setDieFlag(boolean dieFlag) {
     this.dieFlag = dieFlag;
@@ -31,6 +42,8 @@ public class Cylon implements Runnable {
       int spot = 0;
 
       while (true) {
+        long t0 = System.currentTimeMillis();
+
         tape.setColor(spot, Color.BLACK);
         if (goingup) {
           if (spot >= tape.getLength() - 1) {
@@ -48,13 +61,27 @@ public class Cylon implements Runnable {
           }
         }
         tape.setColor(spot, color);
+        long t1 = System.currentTimeMillis();
         tape.updateTape();
+        long t2 = System.currentTimeMillis();
+        logger.debug("took {} to fiddle pixels, {} to update the tape", t1 - t0, t2 - t1);
 
         try {
-          Thread.sleep(100);
+          long delayAlreadyBlown = (System.currentTimeMillis() - t0);
+          long delayForThisGo = delay - delayAlreadyBlown;
+          if (delayForThisGo < 0) {
+            logger.warn("well, it's {}ms too late!", Math.abs(delayForThisGo));
+          } else {
+            long t10 = System.currentTimeMillis();
+            Thread.sleep(delayForThisGo);
+            long t11 = System.currentTimeMillis();
+            logger.debug("slept for {}", t11 - t10);
+          }
         } catch (InterruptedException ex) {
-
+          logger.warn("sleep interrupted");
         }
+        long tfinal = System.currentTimeMillis();
+        logger.debug("this loop took {}, wanted {}", tfinal - t0, delay);
         if (dieFlag)
           break;
       }
@@ -68,5 +95,10 @@ public class Cylon implements Runnable {
       }
     }
 
+  }
+
+  @Override
+  public String toString() {
+    return "Cylon [color=" + color + ", delay=" + delay + "]";
   }
 }

@@ -25,13 +25,15 @@ public class BService {
   @GET
   @Produces("application/xml")
   public String setColor(@PathParam("s") String s,
-      @QueryParam("color") ColorParam colorParam) {
-    logger.info("s={}, color={}", s, colorParam);
-    Color c, c0;
-    c = c0 = colorParam;
-    if (c == null)
-      c = Color.DARK_GRAY;
-    EmbeddedServer.cylon.setColor(c);
-    return "<bservice>" + c0 + "</bservice>";
+      @QueryParam("color") ColorParam colorParam,
+      @QueryParam("delay") Integer delay) {
+    logger.info("s={}, color={}, delay={}", s, colorParam, delay);
+    if (colorParam != null) {
+      EmbeddedServer.cylon.setColor(colorParam);
+    }
+    if (delay != null) {
+      EmbeddedServer.cylon.setDelay(delay);
+    }
+    return "<bservice>" + EmbeddedServer.cylon + "</bservice>";
   }
 }
