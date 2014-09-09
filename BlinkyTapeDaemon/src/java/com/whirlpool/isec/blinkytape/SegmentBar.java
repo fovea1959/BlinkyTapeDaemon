@@ -3,26 +3,27 @@ package com.whirlpool.isec.blinkytape;
 import java.awt.Color;
 import java.util.*;
 
-public class SegmentBar extends Segment  {
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MultivaluedMap;
+
+import com.whirlpool.isec.blinkytape.rest.ColorParam;
+
+public class SegmentBar extends Segment {
   Color c;
-  Integer v = 0;
+
+  Integer value = 0;
 
   @Override
-  public void setValue(String name, Object value) {
-    if (name.equals("color")) {
-      if (value instanceof Color) {
-        c = (Color) value;
+  public void setValues(MultivaluedMap<String, String> m) {
+    for (String name : m.keySet()) {
+      String v = m.getFirst(name);
+      if (name.equals("color")) {
+        c = new ColorParam(v);
+      } else if (name.equals("value")) {
+        value = (new Double(v)).intValue();
       } else {
-        throw new IllegalArgumentException("color must be a color");
+        throw new WebApplicationException("Unknown attribute = '" + name + "'", 404);
       }
-    } else if (name.equals("value")) {
-      if (value instanceof Number) {
-        v = ((Number) value).intValue();
-      } else {
-        throw new IllegalArgumentException("value must be a Number");
-      }
-    } else {
-      throw new IllegalArgumentException("Unknown parameter " + name); 
     }
   }
 
@@ -31,7 +32,8 @@ public class SegmentBar extends Segment  {
     List<Color> rv = new ArrayList<Color>(getLength());
     for (int i = 0; i < getLength(); i++) {
       Color c1 = Color.black;
-      if (i <= v) c1 = c;
+      if (i <      value)
+        c1 = c;
       rv.add(c1);
     }
     return rv;

@@ -10,6 +10,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,18 +27,12 @@ public class BService {
   @Path("{s}")
   @GET
   @Produces("application/xml")
-  public String setColor(@PathParam("s") String s,
-      @QueryParam("color") ColorParam colorParam,
-      @QueryParam("value") Integer value) {
-    logger.info("s={}, color={}, value={}", s, colorParam, value);
+  public String setColor(@PathParam("s") String s, @Context UriInfo ui) {
+    MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
+    logger.info("s={}, qp={}", s, queryParams);
     Segment segment = EmbeddedServer.config.getSegment(s);
     if (segment == null) throw new WebApplicationException("Cannot find '" + s + "'", 400);
-    if (colorParam != null) {
-      segment.setValue("color",  colorParam);
-    }
-    if (value != null) {
-      segment.setValue("value",  value);
-    }
+    segment.setValues(queryParams);
     return "<bservice>" + segment + "</bservice>";
   }
 }

@@ -3,7 +3,11 @@ package com.whirlpool.isec.blinkytape;
 import java.awt.Color;
 import java.util.List;
 
+import javax.ws.rs.core.MultivaluedMap;
+
 abstract public class Segment {
+  String name;
+  Integer start, length;
   public Segment() {
     super();
   }
@@ -25,10 +29,9 @@ abstract public class Segment {
   public void setLength(Integer length) {
     this.length = length;
   }
-  abstract public void setValue (String name, Object value);
+  abstract public void setValues (MultivaluedMap<String, String> m);
   abstract public List<Color> getLeds();
-  String name;
-  Integer start, length;
+  
   @Override
   public String toString() {
     return String.format("Segment [name=%s, start=%s, length=%s]", name, start, length);
