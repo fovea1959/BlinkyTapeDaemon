@@ -7,64 +7,33 @@ import org.slf4j.LoggerFactory;
 
 import jssc.SerialPortException;
 
-public class Cylon implements Runnable {
-  static Logger logger = LoggerFactory.getLogger(Cylon.class);
-
-  private Color color = new Color(200, 128, 128);
+public class SegmentRenderer implements Runnable {
+  static Logger logger = LoggerFactory.getLogger(SegmentRenderer.class);
 
   private boolean dieFlag = false;
 
   private Integer delay = 100;
 
-  public void setDelay(Integer delay) {
-    this.delay = delay;
-  }
-
   public void setDieFlag(boolean dieFlag) {
     this.dieFlag = dieFlag;
-  }
-
-  public Color getColor() {
-    return color;
-  }
-
-  public void setColor(Color color) {
-    this.color = color;
   }
 
   @Override
   public void run() {
     BlinkyTape tape = null;
     try {
-      tape = new BlinkyTape("COM11");
-
-      boolean goingup = true;
-      int spot = 0;
+      tape = new BlinkyTape("COM10");
 
       while (true) {
         long t0 = System.currentTimeMillis();
-
-        tape.setColor(spot, Color.BLACK);
-        if (goingup) {
-          if (spot >= tape.getLength() - 1) {
-            goingup = false;
-            spot--;
-          } else {
-            spot++;
-          }
-        } else {
-          if (spot <= 0) {
-            spot++;
-            goingup = true;
-          } else {
-            spot--;
+        int i = 0;
+        tape.clear();
+        for (Segment segment: EmbeddedServer.config.getSegments()) {
+          for (Color c : segment.getLeds()) {
+            tape.setColor(i++, c);
           }
         }
-        tape.setColor(spot, color);
-        long t1 = System.currentTimeMillis();
         tape.updateTape();
-        long t2 = System.currentTimeMillis();
-        logger.debug("took {} to fiddle pixels, {} to update the tape", t1 - t0, t2 - t1);
 
         try {
           long delayAlreadyBlown = (System.currentTimeMillis() - t0);
@@ -95,10 +64,5 @@ public class Cylon implements Runnable {
       }
     }
 
-  }
-
-  @Override
-  public String toString() {
-    return "Cylon [color=" + color + ", delay=" + delay + "]";
   }
 }

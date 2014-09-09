@@ -22,7 +22,7 @@
 			<!-- The default pattern: Date Priority [Category] Messagen -->
 			<!-- <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] 
 				%m%n"/> -->
-			<param name="ConversionPattern" value="%-5p %d{dd-MM HH:mm:ss,SSS} (%c)  -%m%n" />
+			<param name="ConversionPattern" value="%-5p %d{dd-MM HH:mm:ss.SSS} (%c) - %m%n" />
 		</layout>
 	</appender>
 
@@ -35,15 +35,11 @@
 	</logger>
 
 	<logger name="com.whirlpool.isec.blinkytape">
-		<level value="DEBUG"></level>
-	</logger>
-
-	<logger name="com.whirlpool.isec.blinkytape.EmbeddedServer">
 		<level value="INFO"></level>
 	</logger>
-
-	<logger name="com.whirlpool.isec.blinkytape.DoubleBar">
-		<level value="INFO"></level>
+	
+	<logger name="com.whirlpool.isec.blinkytape.rest.BService">
+	  <level value="DEBUG"/>
 	</logger>
 
 	<root>

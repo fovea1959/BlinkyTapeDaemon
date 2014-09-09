@@ -8,15 +8,16 @@ import jssc.SerialPortException;
 public class BlinkytapeTest {
 
   public static void main(String[] args) {
-    SerialPort serialPort = new SerialPort("COM11");
+    SerialPort serialPort = new SerialPort("COM10");
     try {
       System.out.println("Port opened: " + serialPort.openPort());
       System.out.println("Params setted: " + serialPort.setParams(115200, 8, 1, 0));
       serialPort.writeByte((byte) 255);
 
       float phase = 0;
+      int sent = 0;
 
-      while (phase < 1000) {
+      while (phase < Float.MAX_VALUE) {
         for (int i = 0; i < 60; i++) {
           double budge = .3;
           double rr = (Math.sin(phase * .9 + i * budge) + 1.0) * 127.0;
@@ -38,12 +39,12 @@ public class BlinkytapeTest {
           serialPort.writeByte(bc(r));
           serialPort.writeByte(bc(g));
           serialPort.writeByte(bc(b));
-          // delay();
+          sent = delayIfNecessary(sent, 3);
         }
         serialPort.writeByte((byte) 255);
-        serialPort.writeByte((byte) 255);
-        serialPort.writeByte((byte) 255);
-        phase += .1;
+        sent = delayIfNecessary(sent, 1);
+        phase += .2;
+        System.out.println("updated");
       }
       System.out.println("Port closed: " + serialPort.closePort());
     } catch (SerialPortException ex) {
@@ -58,17 +59,20 @@ public class BlinkytapeTest {
     return rv;
   }
 
-  static void delay() {
-    /*
-     * try { Thread.sleep(100); } catch (InterruptedException ex) { }
-     */
+  static int delayIfNecessary(int count, int more) {
+    count += more;
+    if (count > 30) {
+      System.out.println("waiting");
+      delay();
+      count = 0;
+    }
+    return count;
   }
 
-  static void bigdelay() {
+  static void delay() {
     try {
-      Thread.sleep(10);
+      Thread.sleep(1);
     } catch (InterruptedException ex) {
-      ex.printStackTrace();
     }
   }
 

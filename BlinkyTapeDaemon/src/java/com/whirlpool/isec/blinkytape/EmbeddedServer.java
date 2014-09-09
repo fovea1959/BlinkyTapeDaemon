@@ -1,8 +1,13 @@
 package com.whirlpool.isec.blinkytape;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.security.ProtectionDomain;
 
+import org.apache.commons.digester3.Digester;
+import org.apache.commons.digester3.binder.DigesterLoader;
+import org.apache.commons.digester3.xmlrules.FromXmlRulesModule;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -12,11 +17,17 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
+import org.xml.sax.SAXException;
 
 public class EmbeddedServer {
-  public static Cylon cylon = null;
-  public static DoubleBar doubleBar = null;
+  public static Logger logger = LoggerFactory.getLogger(EmbeddedServer.class);
+
+  public static SegmentRenderer segmentRenderer = null;
+
+  public static Config config = new Config();
 
   /**
    * @param args
@@ -33,6 +44,8 @@ public class EmbeddedServer {
     // not sure if this is necessary
     java.util.logging.Logger.getLogger("org.glassfish.jersey.servlet").setLevel(
         java.util.logging.Level.ALL);
+
+    config();
 
     Server server = new Server();
 
@@ -70,16 +83,14 @@ public class EmbeddedServer {
       }
     }
 
-    cylon = new Cylon();
-    doubleBar = new DoubleBar();
-    Thread tapeThread = new Thread(doubleBar);
+    segmentRenderer = new SegmentRenderer();
+    Thread tapeThread = new Thread(segmentRenderer);
 
     tapeThread.start();
 
     try {
       System.in.read();
-      cylon.setDieFlag(true);
-      doubleBar.setDieFlag(true);
+      segmentRenderer.setDieFlag(true);
       tapeThread.join();
       server.stop();
       server.join();
@@ -89,4 +100,31 @@ public class EmbeddedServer {
     }
   }
 
+  public static void config() {
+    config = new Config();
+
+    DigesterLoader loader = DigesterLoader.newLoader(new MyRulesModule());
+    Digester digester = loader.newDigester();
+
+    digester.push(config);
+    try {
+      digester.parse(new File("config.xml"));
+    } catch (IOException e) {
+      logger.warn("Could not load file", e);
+    } catch (SAXException e) {
+      logger.warn("Invalid file", e);
+    }
+
+    System.out.println(config);
+
+  }
+
+  static class MyRulesModule extends FromXmlRulesModule {
+
+    @Override
+    protected void loadRules() {
+      loadXMLRules(new File("config-rules.xml"));
+    }
+
+  }
 }

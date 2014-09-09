@@ -20,11 +20,15 @@ public class BlinkyTape {
     serialPort = new SerialPort(portName);
     serialPort.openPort();
     serialPort.setParams(115200, 8, 1, 0);
-    triple255();
+    send255();
   }
 
   public void setColor(int i, Color c) {
     leds[i] = c;
+  }
+  
+  public void clear() {
+    for (int i = 0; i < length; i++) leds[i] = Color.black;
   }
 
   public void updateTape() throws SerialPortException {
@@ -54,8 +58,19 @@ public class BlinkyTape {
       fiddleTime += (t1 - t0);
     }
     long t0 = System.currentTimeMillis();
-    serialPort.writeBytes(bytes);
-    triple255();
+    
+    int offset = 0;
+    while (offset < bytes.length) {
+      int length = Math.min(64, bytes.length - offset);
+      byte[] batch = new byte[length];
+      System.arraycopy(bytes, offset, batch, 0, length);
+      offset += length;
+      serialPort.writeBytes(batch);
+      logger.debug("sending batch batch");
+      delay();
+    }
+    send255();
+    logger.debug("sent 255");
     long t1 = System.currentTimeMillis();
     long sendTime = t1 - t0;
     logger.debug ("update breakdown: fiddling={}, sending={}", fiddleTime, sendTime);
@@ -69,10 +84,9 @@ public class BlinkyTape {
     return length;
   }
 
-  void triple255() throws SerialPortException {
+  void send255() throws SerialPortException {
     serialPort.writeByte((byte) 255);
-    serialPort.writeByte((byte) 255);
-    serialPort.writeByte((byte) 255);
+    delay();
   }
 
   static byte bc(int b) {
@@ -81,5 +95,13 @@ public class BlinkyTape {
       rv = 254;
     return (byte) rv;
   }
+  
+  static void delay() {
+    try {
+      Thread.sleep(1);
+    } catch (InterruptedException ex) {
+    }
+  }
+
 
 }
