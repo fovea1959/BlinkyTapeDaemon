@@ -21,8 +21,8 @@ import com.whirlpool.isec.blinkytape.EmbeddedServer;
 import com.whirlpool.isec.blinkytape.Segment;
 
 @Path("/segment")
-public class BService {
-  static Logger logger = LoggerFactory.getLogger(BService.class);
+public class SegmentService {
+  static Logger logger = LoggerFactory.getLogger(SegmentService.class);
 
   @Path("{s}")
   @GET
@@ -33,6 +33,6 @@ public class BService {
     Segment segment = EmbeddedServer.config.getSegment(s);
     if (segment == null) throw new WebApplicationException("Cannot find '" + s + "'", 400);
     segment.setValues(queryParams);
-    return "<bservice>" + segment + "</bservice>";
+    return "<segment>" + segment + "</segment>";
   }
 }

@@ -1,10 +1,12 @@
 package com.whirlpool.isec.blinkytape;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.security.ProtectionDomain;
 
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.digester3.Digester;
 import org.apache.commons.digester3.binder.DigesterLoader;
 import org.apache.commons.digester3.xmlrules.FromXmlRulesModule;
@@ -101,6 +103,7 @@ public class EmbeddedServer {
   }
 
   public static void config() {
+    ConvertUtils.register(new ColorConverter(), Color.class);
     config = new Config();
 
     DigesterLoader loader = DigesterLoader.newLoader(new MyRulesModule());

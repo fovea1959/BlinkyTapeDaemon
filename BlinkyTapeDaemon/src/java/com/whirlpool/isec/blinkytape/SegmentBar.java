@@ -9,7 +9,15 @@ import javax.ws.rs.core.MultivaluedMap;
 import com.whirlpool.isec.blinkytape.rest.ColorParam;
 
 public class SegmentBar extends Segment {
-  Color c;
+  Color color = Color.WHITE;
+
+  public Color getColor() {
+    return color;
+  }
+
+  public void setColor(Color color) {
+    this.color = color;
+  }
 
   Integer value = 0;
 
@@ -18,7 +26,7 @@ public class SegmentBar extends Segment {
     for (String name : m.keySet()) {
       String v = m.getFirst(name);
       if (name.equals("color")) {
-        c = new ColorParam(v);
+        color = new ColorParam(v);
       } else if (name.equals("value")) {
         value = (new Double(v)).intValue();
       } else {
@@ -33,7 +41,7 @@ public class SegmentBar extends Segment {
     for (int i = 0; i < getLength(); i++) {
       Color c1 = Color.black;
       if (i <      value)
-        c1 = c;
+        c1 = color;
       rv.add(c1);
     }
     return rv;

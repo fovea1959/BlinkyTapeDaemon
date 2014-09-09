@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
 <config>
-	<bar name="a" length="10" />
+	<bar name="a" length="10" color="blue"/>
 	<bar name="b" length="20" />
 </config>
