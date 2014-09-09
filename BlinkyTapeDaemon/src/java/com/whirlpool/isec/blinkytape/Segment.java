@@ -7,7 +7,7 @@ import javax.ws.rs.core.MultivaluedMap;
 
 abstract public class Segment {
   String name;
-  Integer start, length;
+  Integer length;
   public Segment() {
     super();
   }
@@ -16,12 +16,6 @@ abstract public class Segment {
   }
   public void setName(String name) {
     this.name = name;
-  }
-  public Integer getStart() {
-    return start;
-  }
-  public void setStart(Integer start) {
-    this.start = start;
   }
   public Integer getLength() {
     return length;
@@ -34,6 +28,6 @@ abstract public class Segment {
   
   @Override
   public String toString() {
-    return String.format("Segment [name=%s, start=%s, length=%s]", name, start, length);
+    return String.format("Segment [name=%s, length=%s]", name, length);
   }
 }
