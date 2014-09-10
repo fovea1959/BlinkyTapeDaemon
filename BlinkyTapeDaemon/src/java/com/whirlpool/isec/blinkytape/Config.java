@@ -3,10 +3,7 @@ package com.whirlpool.isec.blinkytape;
 import java.util.*;
 
 public class Config {
-  @Override
-  public String toString() {
-    return String.format("Config [segments=%s]", segments);
-  }
+  private String name;
 
   private List<Segment> segments = new ArrayList<Segment>();
 
@@ -25,4 +22,17 @@ public class Config {
     return segments;
   }
 
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("Config [name=%s,segments=%s]", name, segments);
+  }
+  
 }

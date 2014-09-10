@@ -5,16 +5,23 @@ import java.util.List;
 
 import javax.ws.rs.core.MultivaluedMap;
 
+import org.slf4j.*;
+
 abstract public class Segment {
+  private static Logger staticLogger = LoggerFactory.getLogger(Segment.class);
+  Logger logger;
+  
   String name;
   Integer length;
   public Segment() {
     super();
+    logger = staticLogger;
   }
   public String getName() {
     return name;
   }
   public void setName(String name) {
+    logger = LoggerFactory.getLogger(Segment.class.getName() + "." + name);
     this.name = name;
   }
   public Integer getLength() {

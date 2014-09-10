@@ -8,7 +8,9 @@ import java.security.ProtectionDomain;
 
 import jssc.SerialPortList;
 
+import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.digester3.Digester;
 import org.apache.commons.digester3.binder.DigesterLoader;
 import org.apache.commons.digester3.xmlrules.FromXmlRulesModule;
@@ -32,7 +34,7 @@ public class EmbeddedServer {
   public static SegmentRenderer segmentRenderer = null;
 
   public static Config config = new Config();
-
+  
   /**
    * @param args
    * @throws Exception
@@ -48,6 +50,11 @@ public class EmbeddedServer {
     // not sure if this is necessary
     java.util.logging.Logger.getLogger("org.glassfish.jersey.servlet").setLevel(
         java.util.logging.Level.ALL);
+    
+    ConvertUtilsBean convertUtilsBean = BeanUtilsBean.getInstance().getConvertUtils();
+    convertUtilsBean.register(new ColorConverter(), Color.class);
+    logger.warn ("Converter = {}", BeanUtilsBean.getInstance());
+
 
     config();
 
@@ -118,7 +125,7 @@ public class EmbeddedServer {
   }
 
   public static void config() {
-    ConvertUtils.register(new ColorConverter(), Color.class);
+    // ConvertUtils.register(new ColorConverter(), Color.class);
     config = new Config();
 
     DigesterLoader loader = DigesterLoader.newLoader(new MyRulesModule());

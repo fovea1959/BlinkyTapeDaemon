@@ -3,6 +3,9 @@
   "-//Apache Commons //DTD digester-rules XML V1.0//EN"
   "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
 <digester-rules>
+	<pattern value="config">
+		<set-properties-rule />
+    </pattern>
 
 	<pattern value="config/bar">
 		<object-create-rule classname="com.whirlpool.isec.blinkytape.SegmentBar" />
