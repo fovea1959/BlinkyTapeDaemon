@@ -8,7 +8,13 @@ import org.slf4j.LoggerFactory;
 import jssc.SerialPortException;
 
 public class SegmentRenderer implements Runnable {
+  public SegmentRenderer(BlinkyTape tape) {
+    super();
+    this.tape = tape;
+  }
   static Logger logger = LoggerFactory.getLogger(SegmentRenderer.class);
+  
+  private BlinkyTape tape = null;
 
   private boolean dieFlag = false;
 
@@ -20,10 +26,7 @@ public class SegmentRenderer implements Runnable {
 
   @Override
   public void run() {
-    BlinkyTape tape = null;
     try {
-      tape = new BlinkyTape("COM10");
-
       while (true) {
         long t0 = System.currentTimeMillis();
         int i = 0;
@@ -57,11 +60,6 @@ public class SegmentRenderer implements Runnable {
     } catch (SerialPortException ex) {
       ex.printStackTrace();
     } finally {
-      try {
-        if (tape != null)
-          tape.close();
-      } catch (SerialPortException ex) {
-      }
     }
 
   }

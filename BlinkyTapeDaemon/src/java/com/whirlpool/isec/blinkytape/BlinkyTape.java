@@ -17,6 +17,7 @@ public class BlinkyTape {
   Color[] leds = new Color[length];
 
   public BlinkyTape(String portName) throws SerialPortException {
+    logger.info("opening up tape on {}", portName);
     serialPort = new SerialPort(portName);
     serialPort.openPort();
     serialPort.setParams(115200, 8, 1, 0);
