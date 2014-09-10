@@ -1,4 +1,4 @@
-package jssc_test;
+package com.whirlpool.isec.blinkytape.test;
 
 import java.awt.Color;
 
