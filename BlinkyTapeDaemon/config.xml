@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 
 <config name="tape2">
-	<bar name="a" length="10" color="blue"/>
-	<bar name="b" length="20" />
-	<solid name="c" length="20" color="#101010"/>
+	<bar name="a" length="5" color="blue"/>
+	<bar name="b" length="5" />
+	<solid name="c" length="5" color="#101010"/>
+	<bar name="prod_old_rt" length="20" color="#200020" />
+	<bar name="prod_new_rt" length="20" color="#200020" />
 </config>

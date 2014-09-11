@@ -4,7 +4,9 @@ package com.whirlpool.isec.blinkytape.rest;
  * @author Crunchify.com
  */
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -27,13 +29,25 @@ public class SegmentService {
   @Path("{s}")
   @GET
   @Produces("application/xml")
-  public String setColor(@PathParam("s") String s, @Context UriInfo ui) {
+  public String setSegmentGet(@PathParam("s") String s, @Context UriInfo ui) {
+    MultivaluedMap<String, String> m = ui.getQueryParameters();
+    return setSegment(s, m);
+  }
+  
+  @Path("{s}")
+  @POST
+  @Consumes("application/x-www-form-urlencoded")
+  @Produces("application/xml")
+  public String setSegmentPost(@PathParam("s") String s, MultivaluedMap<String, String> m) {
+    return setSegment(s, m);
+  }
+  
+  public String setSegment (String s, MultivaluedMap<String, String> m) {
     Util.setupConverters();
-    MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
-    logger.info("s={}, qp={}", s, queryParams);
+    logger.info("s={}, qp={}", s, m);
     Segment<?> segment = EmbeddedServer.config.getSegment(s);
     if (segment == null) throw new WebApplicationException("Cannot find '" + s + "'", 400);
-    segment.setValues(queryParams);
+    segment.setValues(m);
     return "<segment>" + segment.getParameters() + "</segment>";
   }
 }
