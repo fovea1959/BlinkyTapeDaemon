@@ -1,6 +1,5 @@
 package com.whirlpool.isec.blinkytape;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -8,9 +7,6 @@ import java.security.ProtectionDomain;
 
 import jssc.SerialPortList;
 
-import org.apache.commons.beanutils.BeanUtilsBean;
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.digester3.Digester;
 import org.apache.commons.digester3.binder.DigesterLoader;
 import org.apache.commons.digester3.xmlrules.FromXmlRulesModule;
@@ -31,10 +27,10 @@ import org.xml.sax.SAXException;
 public class EmbeddedServer {
   public static Logger logger = LoggerFactory.getLogger(EmbeddedServer.class);
 
-  public static SegmentRenderer segmentRenderer = null;
+  public static TapeRenderer segmentRenderer = null;
 
   public static Config config = new Config();
-  
+
   /**
    * @param args
    * @throws Exception
@@ -50,7 +46,7 @@ public class EmbeddedServer {
     // not sure if this is necessary
     java.util.logging.Logger.getLogger("org.glassfish.jersey.servlet").setLevel(
         java.util.logging.Level.ALL);
-    
+
     Util.setupConverters();
 
     config();
@@ -90,7 +86,7 @@ public class EmbeddedServer {
         e.printStackTrace();
       }
     }
-    
+
     String tapeName = null;
     String[] portNames = SerialPortList.getPortNames();
     for (String name : portNames) {
@@ -99,11 +95,12 @@ public class EmbeddedServer {
         tapeName = name;
       }
     }
-    if (tapeName == null) tapeName = "/dev/blinky";
-    
+    if (tapeName == null)
+      tapeName = "/dev/blinky";
+
     BlinkyTape tape = new BlinkyTape(tapeName);
 
-    segmentRenderer = new SegmentRenderer(tape);
+    segmentRenderer = new TapeRenderer(tape);
     Thread tapeThread = new Thread(segmentRenderer);
 
     tapeThread.start();

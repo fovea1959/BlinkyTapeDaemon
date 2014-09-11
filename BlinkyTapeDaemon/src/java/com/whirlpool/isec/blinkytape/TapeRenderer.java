@@ -5,15 +5,17 @@ import java.awt.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.whirlpool.isec.blinkytape.renderers.Segment;
+
 import jssc.SerialPortException;
 
-public class SegmentRenderer implements Runnable {
-  public SegmentRenderer(BlinkyTape tape) {
+public class TapeRenderer implements Runnable {
+  public TapeRenderer(BlinkyTape tape) {
     super();
     Util.setupConverters();
     this.tape = tape;
   }
-  static Logger logger = LoggerFactory.getLogger(SegmentRenderer.class);
+  static Logger logger = LoggerFactory.getLogger(TapeRenderer.class);
   
   private BlinkyTape tape = null;
 
@@ -32,7 +34,7 @@ public class SegmentRenderer implements Runnable {
         long t0 = System.currentTimeMillis();
         int i = 0;
         tape.clear();
-        for (Segment segment: EmbeddedServer.config.getSegments()) {
+        for (Segment<?> segment: EmbeddedServer.config.getSegments()) {
           for (Color c : segment.getLeds()) {
             tape.setColor(i++, c);
           }

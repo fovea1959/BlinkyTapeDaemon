@@ -2,23 +2,26 @@ package com.whirlpool.isec.blinkytape;
 
 import java.util.*;
 
+import com.whirlpool.isec.blinkytape.renderers.Segment;
+import com.whirlpool.isec.blinkytape.renderers.SegmentParameters;
+
 public class Config {
   private String name;
 
-  private List<Segment> segments = new ArrayList<Segment>();
+  private List<Segment<? extends SegmentParameters>> segments = new ArrayList<Segment<? extends SegmentParameters>>();
 
-  private Map<String, Segment> segmentMap = new HashMap<String, Segment>();
+  private Map<String, Segment<? extends SegmentParameters>> segmentMap = new HashMap<String, Segment<? extends SegmentParameters>>();
 
-  public void addSegment(Segment segment) {
+  public void addSegment(Segment<? extends SegmentParameters> segment) {
     segments.add(segment);
     segmentMap.put(segment.getName(), segment);
   }
 
-  public Segment getSegment(String name) {
+  public Segment<? extends SegmentParameters> getSegment(String name) {
     return segmentMap.get(name);
   }
 
-  public List<Segment> getSegments() {
+  public List<Segment<? extends SegmentParameters>> getSegments() {
     return segments;
   }
 
