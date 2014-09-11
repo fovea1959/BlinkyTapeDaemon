@@ -108,6 +108,7 @@ public class BlinkyTape {
   
 
   public void reset() throws SerialPortException {
+    logger.warn("resetting the port");
     serialPort.closePort();
     SerialPort resetSerialPort = new SerialPort(portName);
     resetSerialPort.openPort();
