@@ -10,6 +10,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.slf4j.*;
 
+@SuppressWarnings("rawtypes")
 abstract public class Segment<P extends SegmentParameters> {
   private static Logger staticLogger = LoggerFactory.getLogger(Segment.class);
 

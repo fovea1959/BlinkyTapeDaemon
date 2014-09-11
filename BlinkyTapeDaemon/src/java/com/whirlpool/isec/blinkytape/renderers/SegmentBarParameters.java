@@ -1,7 +1,5 @@
 package com.whirlpool.isec.blinkytape.renderers;
 
-import java.awt.Color;
-
 public class SegmentBarParameters extends SegmentSolidParameters {
   public SegmentBarParameters(SegmentBar segmentBar) {
     super (segmentBar);
