@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.whirlpool.isec.blinkytape.EmbeddedServer;
 import com.whirlpool.isec.blinkytape.Segment;
+import com.whirlpool.isec.blinkytape.Util;
 
 @Path("/segment")
 public class SegmentService {
@@ -28,6 +29,7 @@ public class SegmentService {
   @GET
   @Produces("application/xml")
   public String setColor(@PathParam("s") String s, @Context UriInfo ui) {
+    Util.setupConverters();
     MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
     logger.info("s={}, qp={}", s, queryParams);
     Segment segment = EmbeddedServer.config.getSegment(s);

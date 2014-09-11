@@ -11,6 +11,7 @@ import jssc.SerialPortException;
 public class BlinkyTape {
   static Logger logger = LoggerFactory.getLogger(BlinkyTape.class);
   private SerialPort serialPort;
+  private String portName;
 
   private final static int length = 60;
 
@@ -18,6 +19,7 @@ public class BlinkyTape {
 
   public BlinkyTape(String portName) throws SerialPortException {
     logger.info("opening up tape on {}", portName);
+    this.portName = portName;
     serialPort = new SerialPort(portName);
     serialPort.openPort();
     serialPort.setParams(115200, 8, 1, 0);
@@ -102,6 +104,17 @@ public class BlinkyTape {
       Thread.sleep(1);
     } catch (InterruptedException ex) {
     }
+  }
+  
+
+  public void reset() throws SerialPortException {
+    SerialPort resetSerialPort = new SerialPort(portName);
+    resetSerialPort.openPort();
+    resetSerialPort.setParams(1200, 8, 0, 0);
+    try {
+      Thread.sleep(10);
+    } catch (InterruptedException e) { }
+    resetSerialPort.closePort();
   }
 
 

@@ -51,10 +51,7 @@ public class EmbeddedServer {
     java.util.logging.Logger.getLogger("org.glassfish.jersey.servlet").setLevel(
         java.util.logging.Level.ALL);
     
-    ConvertUtilsBean convertUtilsBean = BeanUtilsBean.getInstance().getConvertUtils();
-    convertUtilsBean.register(new ColorConverter(), Color.class);
-    logger.warn ("Converter = {}", BeanUtilsBean.getInstance());
-
+    Util.setupConverters();
 
     config();
 

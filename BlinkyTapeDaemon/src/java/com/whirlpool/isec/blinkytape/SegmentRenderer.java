@@ -10,6 +10,7 @@ import jssc.SerialPortException;
 public class SegmentRenderer implements Runnable {
   public SegmentRenderer(BlinkyTape tape) {
     super();
+    Util.setupConverters();
     this.tape = tape;
   }
   static Logger logger = LoggerFactory.getLogger(SegmentRenderer.class);
@@ -43,6 +44,7 @@ public class SegmentRenderer implements Runnable {
           long delayForThisGo = delay - delayAlreadyBlown;
           if (delayForThisGo < 0) {
             logger.warn("well, it's {}ms too late!", Math.abs(delayForThisGo));
+            tape.reset();
           } else {
             long t10 = System.currentTimeMillis();
             Thread.sleep(delayForThisGo);
