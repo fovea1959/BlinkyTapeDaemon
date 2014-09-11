@@ -3,6 +3,14 @@ import org.slf4j.*;
 
 abstract public class SegmentParameters {
   Logger logger = LoggerFactory.getLogger(getClass());
+  
+  Segment segment;
 
-  abstract String getName();
+  public SegmentParameters(Segment s) {
+    segment = s;
+  }
+  
+  public String getName() {
+    return segment.getName();
+  }
 }

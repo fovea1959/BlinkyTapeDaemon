@@ -3,12 +3,12 @@ package com.whirlpool.isec.blinkytape.renderers;
 import java.awt.Color;
 import java.util.*;
 
-public class SegmentBar extends Segment<SegmentBar.Parameters> {
+public class SegmentBar extends Segment<SegmentBarParameters> {
   private Color color = Color.WHITE;
 
   @Override
-  Parameters createParametersInstance() {
-    Parameters rv = new Parameters();
+  SegmentBarParameters createParametersInstance() {
+    SegmentBarParameters rv = new SegmentBarParameters(this);
     rv.setColor(this.getColor());
     return rv;
   }
@@ -33,40 +33,6 @@ public class SegmentBar extends Segment<SegmentBar.Parameters> {
       rv.add(c1);
     }
     return rv;
-  }
-
-  public class Parameters extends SegmentParameters {
-    @Override
-    String getName() {
-      return SegmentBar.this.getName();
-    }
-
-    Color color = Color.WHITE;
-
-    Integer value = 0;
-
-    public Color getColor() {
-      return color;
-    }
-
-    public void setColor(Color color) {
-      logger.info ("setting color on {} to {}", this, color);
-      this.color = color;
-    }
-
-    public Integer getValue() {
-      return value;
-    }
-
-    public void setValue(Integer value) {
-      this.value = value;
-    }
-
-    @Override
-    public String toString() {
-      return String.format("%s [name=%s, color=%s, value=%s]", super.toString(), getName(), color, value);
-    }
-
   }
 
 }
