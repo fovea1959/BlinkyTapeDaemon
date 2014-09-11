@@ -34,6 +34,6 @@ public class SegmentService {
     Segment<?> segment = EmbeddedServer.config.getSegment(s);
     if (segment == null) throw new WebApplicationException("Cannot find '" + s + "'", 400);
     segment.setValues(queryParams);
-    return "<segment>" + segment + "</segment>";
+    return "<segment>" + segment.getParameters() + "</segment>";
   }
 }

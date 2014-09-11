@@ -36,13 +36,14 @@ public class SegmentBar extends Segment<SegmentBar.Parameters> {
   }
 
   public class Parameters extends SegmentParameters {
+    @Override
+    String getName() {
+      return SegmentBar.this.getName();
+    }
+
     Color color = Color.WHITE;
 
     Integer value = 0;
-
-    public Parameters() {
-      super();
-    }
 
     public Color getColor() {
       return color;
@@ -63,7 +64,7 @@ public class SegmentBar extends Segment<SegmentBar.Parameters> {
 
     @Override
     public String toString() {
-      return String.format("%s [color=%s, value=%s]", super.toString(), color, value);
+      return String.format("%s [name=%s, color=%s, value=%s]", super.toString(), getName(), color, value);
     }
 
   }

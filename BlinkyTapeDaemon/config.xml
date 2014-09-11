@@ -3,5 +3,5 @@
 <config name="tape2">
 	<bar name="a" length="10" color="blue"/>
 	<bar name="b" length="20" />
-	<solid name="c" length="20" color="gray"/>
+	<solid name="c" length="20" color="#101010"/>
 </config>
