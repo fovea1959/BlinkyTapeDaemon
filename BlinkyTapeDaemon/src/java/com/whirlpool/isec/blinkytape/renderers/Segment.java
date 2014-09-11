@@ -1,7 +1,6 @@
 package com.whirlpool.isec.blinkytape.renderers;
 
 import java.awt.Color;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 

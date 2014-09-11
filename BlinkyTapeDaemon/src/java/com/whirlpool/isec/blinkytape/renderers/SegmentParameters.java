@@ -1,12 +1,13 @@
 package com.whirlpool.isec.blinkytape.renderers;
 import org.slf4j.*;
 
-abstract public class SegmentParameters {
+@SuppressWarnings("rawtypes")
+abstract public class SegmentParameters<S extends Segment> {
   Logger logger = LoggerFactory.getLogger(getClass());
   
-  Segment segment;
+  S segment;
 
-  public SegmentParameters(Segment s) {
+  public SegmentParameters (S s) {
     segment = s;
   }
   

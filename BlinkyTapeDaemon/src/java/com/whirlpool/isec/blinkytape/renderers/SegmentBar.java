@@ -3,9 +3,7 @@ package com.whirlpool.isec.blinkytape.renderers;
 import java.awt.Color;
 import java.util.*;
 
-public class SegmentBar extends Segment<SegmentBarParameters> {
-  private Color color = Color.WHITE;
-
+public class SegmentBar extends SegmentSolid {
   @Override
   SegmentBarParameters createParametersInstance() {
     SegmentBarParameters rv = new SegmentBarParameters(this);
@@ -13,19 +11,10 @@ public class SegmentBar extends Segment<SegmentBarParameters> {
     return rv;
   }
 
-  public Color getColor() {
-    return color;
-  }
-  
-  public void setColor(Color color) {
-    logger.info ("setting color on {} to {}", this, color);
-    this.color = color;
-  }
-
   @Override
   public List<Color> getLeds() {
     List<Color> rv = new ArrayList<Color>(getLength());
-    int value = getParameters().getValue();
+    int value = ((SegmentBarParameters) getParameters()).getValue();
     for (int i = 0; i < getLength(); i++) {
       Color c1 = Color.black;
       if (i < value)
