@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.ProtectionDomain;
 
-import jssc.SerialPortList;
-
 import org.apache.commons.digester3.Digester;
 import org.apache.commons.digester3.binder.DigesterLoader;
 import org.apache.commons.digester3.xmlrules.FromXmlRulesModule;
@@ -91,18 +89,7 @@ public class EmbeddedServer {
       }
     }
 
-    String tapeName = null;
-    String[] portNames = SerialPortList.getPortNames();
-    for (String name : portNames) {
-      System.out.println(name);
-      if (name.matches("^COM1\\d$")) {
-        tapeName = name;
-      }
-    }
-    if (tapeName == null)
-      tapeName = "/dev/blinky";
-
-    BlinkyTape tape = new BlinkyTape(tapeName);
+    BlinkyTape tape = new BlinkyTape();
 
     segmentRenderer = new TapeRenderer(tape);
     Thread tapeThread = new Thread(segmentRenderer);

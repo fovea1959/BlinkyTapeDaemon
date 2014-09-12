@@ -5,26 +5,23 @@ import java.awt.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.whirlpool.isec.blinkytape.serial.BTSerial;
+import com.whirlpool.isec.blinkytape.serial.BTSerialJssc;
+
 import jssc.SerialPort;
 import jssc.SerialPortException;
 
 public class BlinkyTape {
   static Logger logger = LoggerFactory.getLogger(BlinkyTape.class);
-  static Logger loggerSerial = LoggerFactory.getLogger(BlinkyTape.class.getName() + ".serial");
-
-  private SerialPort serialPort;
-  private String portName;
+  
+  private BTSerial btSerial;
 
   private final static int length = 60;
 
   Color[] leds = new Color[length];
 
-  public BlinkyTape(String portName) throws SerialPortException {
-    logger.info("opening up tape on {}", portName);
-    this.portName = portName;
-    serialPort = new SerialPort(portName);
-    serialPort.openPort();
-    serialPort.setParams(115200, 8, 1, 0);
+  public BlinkyTape() throws SerialPortException {
+    btSerial = new BTSerialJssc();
     send255();
   }
 
@@ -66,12 +63,11 @@ public class BlinkyTape {
     
     int offset = 0;
     while (offset < bytes.length) {
-      int length = Math.min(64, bytes.length - offset);
+      int length = Math.min(50, bytes.length - offset);
       byte[] batch = new byte[length];
       System.arraycopy(bytes, offset, batch, 0, length);
       offset += length;
-      serialPort.writeBytes(batch);
-      loggerSerial.debug("sent {} bytes", batch.length);
+      btSerial.writeBytes(batch);
       delay();
     }
     send255();
@@ -81,7 +77,7 @@ public class BlinkyTape {
   }
 
   public void close() throws SerialPortException {
-    serialPort.closePort();
+    btSerial.close();
   }
 
   public int getLength() {
@@ -89,8 +85,9 @@ public class BlinkyTape {
   }
 
   void send255() throws SerialPortException {
-    serialPort.writeByte((byte) 255);
-    loggerSerial.debug("sent 1 byte (the 255)");
+    btSerial.writeByte((byte) 255);
+    btSerial.writeByte((byte) 255);
+    btSerial.writeByte((byte) 255);
     delay();
   }
 
@@ -110,16 +107,7 @@ public class BlinkyTape {
   
 
   public void reset() throws SerialPortException {
-    logger.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!! resetting the port");
-    serialPort.closePort();
-    SerialPort resetSerialPort = new SerialPort(portName);
-    resetSerialPort.openPort();
-    resetSerialPort.setParams(1200, 8, 0, 0);
-    try {
-      Thread.sleep(10);
-    } catch (InterruptedException e) { }
-    resetSerialPort.closePort();
-    serialPort.openPort();
+    btSerial.reset();
   }
 
 
