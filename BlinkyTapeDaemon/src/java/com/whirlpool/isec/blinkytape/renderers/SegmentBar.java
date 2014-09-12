@@ -15,10 +15,16 @@ public class SegmentBar extends SegmentSolid {
   public List<Color> getLedsForInformation() {
     List<Color> rv = new ArrayList<Color>(getLength());
     double value = ((SegmentBarParameters) getParameters()).getValue();
+    boolean over = false;
     for (int i = 1; i <= getLength(); i++) {
       Color c1 = Color.black;
-      if (i < value)
+      if (i <= value) {
+        logger.debug("** {} <= {}", i, value);
         c1 = getParameters().getColor();
+      } else {
+        if (!over) logger.debug("{} !<= {}", i, value);
+        over = true;
+      }
       rv.add(c1);
     }
     return rv;
