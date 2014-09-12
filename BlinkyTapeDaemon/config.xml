@@ -7,5 +7,6 @@
 	<bar name="b" length="20" />
 	<marker colorOff="#000010" colorOn="black"/>
 	<solid name="c" length="20" color="#101010" />
+	<!-- gotta be a little funny -->
 	<marker colorOn="#000800" colorOff="#080000" />
 </config>
