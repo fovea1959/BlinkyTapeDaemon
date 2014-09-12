@@ -19,6 +19,8 @@ abstract public class Segment<P extends SegmentParameters> {
   String name;
 
   Integer length;
+  
+  boolean blinkyTapeVersionCurrent = true;
 
   private P parameters;
 
@@ -36,20 +38,20 @@ abstract public class Segment<P extends SegmentParameters> {
 
   abstract P createParametersInstance();
 
-  public String getName() {
+  final public String getName() {
     return name;
   }
 
-  public void setName(String name) {
+  final public void setName(String name) {
     logger = LoggerFactory.getLogger(Segment.class.getName() + "." + name);
     this.name = name;
   }
 
-  public Integer getLength() {
+  final public Integer getLength() {
     return length;
   }
 
-  public void setLength(Integer length) {
+  final public void setLength(Integer length) {
     this.length = length;
   }
 
@@ -62,6 +64,8 @@ abstract public class Segment<P extends SegmentParameters> {
       setValue(name, v);
     }
     logger.warn("After = {}", getParameters().toString());
+    // a fair bet here
+    blinkyTapeVersionIsNowObsoleteWarningWillRobinsonWarning();
   }
 
   public void setValue(String name, String v) {
@@ -75,7 +79,24 @@ abstract public class Segment<P extends SegmentParameters> {
     }
   }
 
-  abstract public List<Color> getLeds();
+  abstract public List<Color> getLedsForInformation();
+  
+  final public List<Color> getLedsForBlinkyTape() {
+    blinkyTapeVersionCurrent = true;
+    return getLedsForInformation();
+  }
+  
+  public final void blinkyTapeVersionIsNowObsoleteWarningWillRobinsonWarning() {
+    blinkyTapeVersionCurrent = false;
+  }
+  
+  public final boolean isBlinkyTapeVersionCurrent() {
+    gazeAtMyNavelAmIReallyCurrent();
+    return blinkyTapeVersionCurrent;
+  }
+  
+  public void gazeAtMyNavelAmIReallyCurrent() {
+  }
 
   @Override
   public String toString() {

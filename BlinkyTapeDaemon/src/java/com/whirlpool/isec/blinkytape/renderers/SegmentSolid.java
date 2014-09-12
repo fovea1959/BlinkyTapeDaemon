@@ -23,7 +23,7 @@ public class SegmentSolid extends Segment<SegmentSolidParameters> {
   }
 
   @Override
-  public List<Color> getLeds() {
+  public List<Color> getLedsForInformation() {
     List<Color> rv = new ArrayList<Color>(getLength());
     for (int i = 0; i < getLength(); i++) {
       rv.add(getParameters().getColor());

@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.xml.sax.SAXException;
 
+import com.whirlpool.isec.blinkytape.renderers.KeeptheStripAlive;
+
 public class EmbeddedServer {
   public static Logger logger = LoggerFactory.getLogger(EmbeddedServer.class);
 
@@ -133,6 +135,7 @@ public class EmbeddedServer {
     } catch (SAXException e) {
       logger.warn("Invalid file", e);
     }
+    config.addSegment(new KeeptheStripAlive());
 
     System.out.println(config);
 

@@ -34,12 +34,17 @@ public class TapeRenderer implements Runnable {
         long t0 = System.currentTimeMillis();
         int i = 0;
         tape.clear();
+        boolean needToActuallyUpdate = false;
         for (Segment<?> segment: EmbeddedServer.config.getSegments()) {
-          for (Color c : segment.getLeds()) {
+          if (!segment.isBlinkyTapeVersionCurrent()) {
+            logger.info("wussy {} thinks we should update", segment.getName());
+            needToActuallyUpdate = true;
+          }
+          for (Color c : segment.getLedsForBlinkyTape()) {
             tape.setColor(i++, c);
           }
         }
-        tape.updateTape();
+        if (needToActuallyUpdate) tape.updateTape();
 
         try {
           long delayAlreadyBlown = (System.currentTimeMillis() - t0);
