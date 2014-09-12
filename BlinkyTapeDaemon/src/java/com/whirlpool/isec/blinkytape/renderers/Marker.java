@@ -1,20 +1,24 @@
 package com.whirlpool.isec.blinkytape.renderers;
 
 import java.awt.Color;
-import java.util.List;
+import java.util.*;
 
-public class Marker extends SegmentSolid {
+@SuppressWarnings("rawtypes")
+public class Marker extends Segment<SegmentParameters> {
   boolean wasOn = false;
+
+  Color colorOn = Color.DARK_GRAY;
+
+  Color colorOff = Color.BLACK;
 
   public Marker() {
     super();
     setName(this.toString());
-    setLength(1);
+    super.setLength(1);
   }
 
   @Override
-  SegmentSolidParameters createParametersInstance() {
-    // TODO Auto-generated method stub
+  MarkerParameters createParametersInstance() {
     return new MarkerParameters(this);
   }
 
@@ -33,12 +37,25 @@ public class Marker extends SegmentSolid {
 
   @Override
   public List<Color> getLedsForInformation() {
-    List<Color> rv = super.getLedsForInformation();
-    if (!wellAmILit()) {
-      for (int i = 0; i < rv.size(); i++) 
-        rv.set(i,  Color.black);
+    logger.debug("length = {}", getLength());
+    List<Color> rv = new ArrayList<Color>(getLength());
+    for (int i = 0; i < getLength(); i++) {
+      rv.add(wellAmILit() ? colorOn : colorOff);
     }
+    logger.debug("marker {} colors = {}", this.toString(), rv.toString());
     return rv;
   }
 
+  public void setColorOn(Color colorOn) {
+    this.colorOn = colorOn;
+  }
+
+  public void setColorOff(Color colorOff) {
+    this.colorOff = colorOff;
+  }
+
+  @Override
+  public void setLength(Integer length) {
+    throw new RuntimeException("no no no; I am a marker");
+  }
 }

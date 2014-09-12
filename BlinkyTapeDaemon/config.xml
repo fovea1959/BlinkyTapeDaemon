@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 
 <config name="tape">
-	<marker color="yellow" />
+	<marker colorOn="yellow" />
 	<bar name="a" length="10" color="blue" />
-	<marker color="green" />
+	<marker colorOn="green" />
 	<bar name="b" length="20" />
-	<marker color="blue" />
+	<marker colorOn="blue" />
 	<solid name="c" length="20" color="#101010" />
-	<marker color="yellow" />
+	<marker colorOn="#000800" colorOff="#080000" />
 </config>
