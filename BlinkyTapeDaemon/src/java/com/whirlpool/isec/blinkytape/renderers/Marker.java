@@ -32,7 +32,7 @@ public class Marker extends Segment<SegmentParameters> {
 
   boolean wellAmILit() {
     long t = System.currentTimeMillis();
-    return (t % 5000 < 100);
+    return (t % 2000 < 100);
   }
 
   @Override
