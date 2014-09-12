@@ -18,7 +18,7 @@ abstract public class Segment<P extends SegmentParameters> {
 
   String name;
 
-  Integer length;
+  private Integer length;
   
   boolean blinkyTapeVersionCurrent = true;
 
@@ -47,32 +47,32 @@ abstract public class Segment<P extends SegmentParameters> {
     this.name = name;
   }
 
-  final public Integer getLength() {
+  public Integer getLength() {
     return length;
   }
 
-  final public void setLength(Integer length) {
+  public void setLength(Integer length) {
     this.length = length;
   }
 
   public void setValues(MultivaluedMap<String, String> m) {
     // ConvertUtils.register(new ColorConverter(), Color.class);
     logger.warn("Converter = {}", BeanUtilsBean.getInstance());
-    logger.warn("Before = {}", getParameters().toString());
+    // logger.warn("Before = {}", getParameters().toString());
     for (String name : m.keySet()) {
       String v = m.getFirst(name);
       setValue(name, v);
     }
-    logger.warn("After = {}", getParameters().toString());
+    // logger.warn("After = {}", getParameters().toString());
     // a fair bet here
     blinkyTapeVersionIsNowObsoleteWarningWillRobinsonWarning();
   }
 
   public void setValue(String name, String v) {
     try {
-      logger.warn("Before 1 {} = {}", name, getParameters().toString());
+      // logger.warn("Before 1 {} = {}", name, getParameters().toString());
       BeanUtils.setProperty(getParameters(), name, v);
-      logger.warn("After 1 = {}", getParameters().toString());
+      // logger.warn("After 1 = {}", getParameters().toString());
     } catch (IllegalAccessException | InvocationTargetException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -100,6 +100,6 @@ abstract public class Segment<P extends SegmentParameters> {
 
   @Override
   public String toString() {
-    return String.format("Segment [name=%s, length=%s]", name, length);
+    return String.format("%s [name=%s, length=%s]", super.toString(), name, length);
   }
 }

@@ -13,6 +13,12 @@
 		<set-next-rule methodname="addSegment" />
 	</pattern>
 
+	<pattern value="config/marker">
+		<object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.Marker" />
+		<set-properties-rule />
+		<set-next-rule methodname="addSegment" />
+	</pattern>
+
 	<pattern value="config/solid">
 		<object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.SegmentSolid" />
 		<set-properties-rule />

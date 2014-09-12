@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class Util {
 
-  public static Logger logger = LoggerFactory.getLogger(EmbeddedServer.class);
+  public static Logger logger = LoggerFactory.getLogger(Util.class);
 
   public static void setupConverters() {
     ConvertUtilsBean convertUtilsBean = BeanUtilsBean.getInstance().getConvertUtils();

@@ -1,6 +1,7 @@
 package com.whirlpool.isec.blinkytape;
 
 import java.awt.Color;
+import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,11 +37,17 @@ public class TapeRenderer implements Runnable {
         tape.clear();
         boolean needToActuallyUpdate = false;
         for (Segment<?> segment: EmbeddedServer.config.getSegments()) {
+          boolean thisSegmentIsDirty = false;
           if (!segment.isBlinkyTapeVersionCurrent()) {
-            logger.info("wussy {} thinks we should update", segment.getName());
+            logger.info("{} thinks we should update", segment.getName());
+            thisSegmentIsDirty = true;
             needToActuallyUpdate = true;
           }
-          for (Color c : segment.getLedsForBlinkyTape()) {
+          Collection<Color> cs = segment.getLedsForBlinkyTape();
+          if (thisSegmentIsDirty) {
+            logger.info("{} presents colors {}", segment.getName(), cs);
+          }
+          for (Color c : cs) {
             tape.setColor(i++, c);
           }
         }

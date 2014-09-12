@@ -3,10 +3,10 @@ package com.whirlpool.isec.blinkytape.renderers;
 import java.util.Collections;
 import java.util.List;
 
-public class KeeptheStripAlive extends Segment {
+public class KeeptheStripAlive extends SegmentSolid {
   public KeeptheStripAlive() {
     super();
-    setName("wussyWussyWussy");
+    setName("KeepTheStripAlive");
   }
   
   
@@ -14,7 +14,6 @@ public class KeeptheStripAlive extends Segment {
   public void gazeAtMyNavelAmIReallyCurrent() {
     long t1 = System.currentTimeMillis();
     if ((t1 - t0) > 2000) {
-      logger.info("ok, I am old");
       blinkyTapeVersionIsNowObsoleteWarningWillRobinsonWarning();
       t0 = t1;
     }
@@ -23,7 +22,7 @@ public class KeeptheStripAlive extends Segment {
   long t0 = System.currentTimeMillis();
 
   @Override
-  SegmentParameters createParametersInstance() {
+  SegmentSolidParameters createParametersInstance() {
     // TODO Auto-generated method stub
     return null;
   }

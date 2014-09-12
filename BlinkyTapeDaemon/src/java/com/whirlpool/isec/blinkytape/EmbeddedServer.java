@@ -52,6 +52,8 @@ public class EmbeddedServer {
     Util.setupConverters();
 
     config();
+    
+    // System.exit(0);
 
     Server server = new Server();
 

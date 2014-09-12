@@ -26,9 +26,16 @@ public class SegmentSolid extends Segment<SegmentSolidParameters> {
   public List<Color> getLedsForInformation() {
     List<Color> rv = new ArrayList<Color>(getLength());
     for (int i = 0; i < getLength(); i++) {
-      rv.add(getParameters().getColor());
+      Color c = getParameters().getColor();
+      // logger.info("adding {} to color for {}", c, this);
+      rv.add(c);
     }
     return rv;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%s [color=%s]", super.toString(), color);
   }
 
 }
