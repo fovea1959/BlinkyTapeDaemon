@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-
 <config name="tape">
 	<marker colorOff="#000010" colorOn="black"/>
 	<bar name="a" length="10" color="blue" />
