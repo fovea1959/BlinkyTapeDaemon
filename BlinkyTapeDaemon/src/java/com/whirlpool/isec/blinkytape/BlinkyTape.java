@@ -10,6 +10,8 @@ import jssc.SerialPortException;
 
 public class BlinkyTape {
   static Logger logger = LoggerFactory.getLogger(BlinkyTape.class);
+  static Logger loggerSerial = LoggerFactory.getLogger(BlinkyTape.class.getName() + ".serial");
+
   private SerialPort serialPort;
   private String portName;
 
@@ -69,11 +71,10 @@ public class BlinkyTape {
       System.arraycopy(bytes, offset, batch, 0, length);
       offset += length;
       serialPort.writeBytes(batch);
-      logger.debug("sending batch batch");
+      loggerSerial.debug("sent {} bytes", batch.length);
       delay();
     }
     send255();
-    logger.debug("sent 255");
     long t1 = System.currentTimeMillis();
     long sendTime = t1 - t0;
     logger.debug ("update breakdown: fiddling={}, sending={}", fiddleTime, sendTime);
@@ -89,6 +90,7 @@ public class BlinkyTape {
 
   void send255() throws SerialPortException {
     serialPort.writeByte((byte) 255);
+    loggerSerial.debug("sent 1 byte (the 255)");
     delay();
   }
 
@@ -101,14 +103,14 @@ public class BlinkyTape {
   
   static void delay() {
     try {
-      Thread.sleep(1);
+      Thread.sleep(5);
     } catch (InterruptedException ex) {
     }
   }
   
 
   public void reset() throws SerialPortException {
-    logger.warn("resetting the port");
+    logger.warn("!!!!!!!!!!!!!!!!!!!!!!!!!!!! resetting the port");
     serialPort.closePort();
     SerialPort resetSerialPort = new SerialPort(portName);
     resetSerialPort.openPort();
