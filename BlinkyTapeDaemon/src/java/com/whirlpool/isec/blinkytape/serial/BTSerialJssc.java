@@ -37,7 +37,7 @@ public class BTSerialJssc extends BTSerial {
 
   @Override
   public void writeBytes(byte[] bytes) {
-    logger.info("writing {} bytes", bytes.length);
+    logger.debug("writing {} bytes", bytes.length);
     try {
       serialPort.writeBytes(bytes);
     } catch (SerialPortException e) {
@@ -47,7 +47,7 @@ public class BTSerialJssc extends BTSerial {
 
   @Override
   public void writeByte(byte b) {
-    logger.info("writing byte {}", (int) b & 0xFF);
+    logger.debug("writing byte {}", (int) b & 0xFF);
     try {
       serialPort.writeByte(b);
     } catch (SerialPortException e) {

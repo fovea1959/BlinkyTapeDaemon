@@ -58,17 +58,19 @@ abstract public class Segment<P extends SegmentParameters> {
   public void setValues(MultivaluedMap<String, String> m) {
     // ConvertUtils.register(new ColorConverter(), Color.class);
     logger.warn("Converter = {}", BeanUtilsBean.getInstance());
-    // logger.warn("Before = {}", getParameters().toString());
+    logger.warn("incoming = {}", m.toString());
+    logger.warn("before = {}", getParameters().toString());
     for (String name : m.keySet()) {
       String v = m.getFirst(name);
       setValue(name, v);
     }
-    // logger.warn("After = {}", getParameters().toString());
+    logger.warn("after  = {}", getParameters().toString());
     // a fair bet here
     blinkyTapeVersionIsNowObsoleteWarningWillRobinsonWarning();
   }
 
   public void setValue(String name, String v) {
+    logger.info("setting {} to {}", name, v);
     try {
       // logger.warn("Before 1 {} = {}", name, getParameters().toString());
       BeanUtils.setProperty(getParameters(), name, v);

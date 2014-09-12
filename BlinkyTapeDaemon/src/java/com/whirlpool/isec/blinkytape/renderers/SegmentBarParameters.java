@@ -5,13 +5,13 @@ public class SegmentBarParameters extends SegmentSolidParameters {
     super (segmentBar);
   }
 
-  Integer value = 0;
+  Double value = 0.0;
 
-  public Integer getValue() {
+  public Double getValue() {
     return value;
   }
 
-  public void setValue(Integer value) {
+  public void setValue(Double value) {
     this.value = value;
   }
 

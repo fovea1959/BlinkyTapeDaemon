@@ -46,7 +46,10 @@ public class SegmentService {
     Util.setupConverters();
     logger.info("s={}, qp={}", s, m);
     Segment<?> segment = EmbeddedServer.config.getSegment(s);
-    if (segment == null) throw new WebApplicationException("Cannot find '" + s + "'", 400);
+    if (segment == null) {
+      logger.error("Cannot find segment {}", s);
+      throw new WebApplicationException("Cannot find '" + s + "'", 400);
+    }
     segment.setValues(m);
     return "<segment>" + segment.getParameters() + "</segment>";
   }

@@ -45,14 +45,14 @@ public class TapeRenderer implements Runnable {
           }
           Collection<Color> cs = segment.getLedsForBlinkyTape();
           if (thisSegmentIsDirty) {
-            logger.info("{} thought we should update, and presents colors {}", segment.getName(), cs);
+            logger.debug("{} thought we should update, and presents colors {}", segment.getName(), cs);
           }
           for (Color c : cs) {
             tape.setColor(i++, c);
           }
         }
         if (needToActuallyUpdate) {
-          logger.info("updating tape");
+          logger.debug("updating tape");
           tape.updateTape();
         }
 
