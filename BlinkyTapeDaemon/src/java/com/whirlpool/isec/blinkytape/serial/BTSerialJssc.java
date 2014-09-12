@@ -31,7 +31,7 @@ public class BTSerialJssc extends BTSerial {
       serialPort.openPort();
       serialPort.setParams(115200, 8, 1, 0);
     } catch (SerialPortException e) {
-      throw new RuntimeException(e);
+      throw new BTSerialException(e);
     }
   }
 
@@ -39,9 +39,10 @@ public class BTSerialJssc extends BTSerial {
   public void writeBytes(byte[] bytes) {
     logger.debug("writing {} bytes", bytes.length);
     try {
-      serialPort.writeBytes(bytes);
+      boolean ok = serialPort.writeBytes(bytes);
+      if (!ok) throw new RuntimeException("writeBytes() failed");
     } catch (SerialPortException e) {
-      throw new RuntimeException(e);
+      throw new BTSerialException(e);
     }
   }
 
@@ -49,9 +50,10 @@ public class BTSerialJssc extends BTSerial {
   public void writeByte(byte b) {
     logger.debug("writing byte {}", (int) b & 0xFF);
     try {
-      serialPort.writeByte(b);
+      boolean ok = serialPort.writeByte(b);
+      if (!ok) throw new RuntimeException("writeBytes() failed");
     } catch (SerialPortException e) {
-      throw new RuntimeException(e);
+      throw new BTSerialException(e);
     }
   }
 
@@ -60,7 +62,7 @@ public class BTSerialJssc extends BTSerial {
     try {
       serialPort.closePort();
     } catch (SerialPortException e) {
-      throw new RuntimeException(e);
+      throw new BTSerialException(e);
     }
   }
 
@@ -79,7 +81,7 @@ public class BTSerialJssc extends BTSerial {
       resetSerialPort.closePort();
       serialPort.openPort();
     } catch (SerialPortException e) {
-      throw new RuntimeException(e);
+      throw new BTSerialException(e);
     }
   }
 
