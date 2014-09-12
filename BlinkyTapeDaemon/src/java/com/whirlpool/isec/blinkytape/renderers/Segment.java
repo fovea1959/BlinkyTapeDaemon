@@ -76,6 +76,7 @@ abstract public class Segment<P extends SegmentParameters> {
     } catch (IllegalAccessException | InvocationTargetException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
+      logger.warn("Converter = {} on Thread {}", BeanUtilsBean.getInstance(), Thread.currentThread());
     }
   }
 
