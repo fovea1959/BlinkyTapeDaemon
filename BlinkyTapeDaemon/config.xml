@@ -1,13 +1,15 @@
 <?xml version="1.0"?>
-<config name="tape">
-	<marker colorOff="#000010" colorOn="black"/>
-	<bar name="a" length="10" color="blue" />
-	<marker colorOff="#000010" colorOn="black"/>
-	<bar name="b" length="10" />
-	<marker colorOff="#000010" colorOn="black"/>
-	<solid name="c" length="5" color="#101010" />
-	<marker colorOff="#000010" colorOn="black"/>
-	<bar name="prod_new_rt" color="#004000" length="20" />
-	<!-- gotta be a little funny -->
-	<marker colorOn="#000800" colorOff="#080000" />
+<config>
+	<tape name="tape" reverse="true">
+		<marker colorOff="#000010" colorOn="black" />
+		<bar name="a" length="10" color="blue" />
+		<marker colorOff="#000010" colorOn="black" />
+		<bar name="b" length="10" />
+		<marker colorOff="#000010" colorOn="black" />
+		<solid name="c" length="5" color="#101010" />
+		<marker colorOff="#000010" colorOn="black" />
+		<bar name="prod_new_rt" color="#004000" length="20" />
+		<!-- gotta be a little funny -->
+		<marker colorOn="#000800" colorOff="#080000" />
+	</tape>
 </config>

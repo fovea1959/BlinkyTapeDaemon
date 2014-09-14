@@ -1,5 +1,6 @@
 package com.whirlpool.isec.blinkytape.serial;
 
+@SuppressWarnings("serial")
 public class BTSerialException extends RuntimeException {
 
   public BTSerialException() {

@@ -13,9 +13,10 @@ public class SegmentSolidParameters extends SegmentParameters<SegmentSolid> {
   }
 
   public void setColor(Color color) {
-    logger.info ("setting color on {} to {}", this, color);
+    logger.debug ("setting color on {} to {}", this, color);
     this.color = color;
   }
+  
   @Override
   public String toString() {
     return String.format("%s [name=%s, color=%s]", super.toString(), getName(), color);

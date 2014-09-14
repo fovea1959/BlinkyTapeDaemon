@@ -22,12 +22,15 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.xml.sax.SAXException;
 
+import com.whirlpool.isec.blinkytape.config.Config;
+import com.whirlpool.isec.blinkytape.config.TapeConfig;
 import com.whirlpool.isec.blinkytape.renderers.KeeptheStripAlive;
+import com.whirlpool.isec.blinkytape.strips.LocalBlinkyTape;
 
 public class EmbeddedServer {
   public static Logger logger = LoggerFactory.getLogger(EmbeddedServer.class);
 
-  public static TapeRenderer segmentRenderer = null;
+  public static TapeRenderer tapeRenderer = null;
 
   public static Config config = new Config();
 
@@ -88,17 +91,24 @@ public class EmbeddedServer {
         e.printStackTrace();
       }
     }
+    
+    // Need to test this
+    
+    TapeConfig tapeConfig = config.getTapeConfigs().get(0);
 
-    BlinkyTape tape = new BlinkyTape();
+    // need to look at configuration and make the proper tapes from config. Perhaps methods in tapeconfig
+    // get moved to AbstractTape?
+    
+    LocalBlinkyTape tape = new LocalBlinkyTape(tapeConfig);
 
-    segmentRenderer = new TapeRenderer(tape);
-    Thread tapeThread = new Thread(segmentRenderer);
+    tapeRenderer = new TapeRenderer(tape);
+    Thread tapeThread = new Thread(tapeRenderer);
 
     tapeThread.start();
 
     try {
       System.in.read();
-      segmentRenderer.setDieFlag(true);
+      tapeRenderer.setDieFlag(true);
       tapeThread.join();
       tape.close();
       server.stop();
@@ -124,7 +134,11 @@ public class EmbeddedServer {
     } catch (SAXException e) {
       logger.warn("Invalid file", e);
     }
-    config.addSegment(new KeeptheStripAlive());
+    
+    for (TapeConfig tapeConfig : config.getTapeConfigs())
+    tapeConfig.addSegment(new KeeptheStripAlive());
+    
+    config.postParse();
 
     System.out.println(config);
 

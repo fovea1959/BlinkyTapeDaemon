@@ -7,18 +7,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.whirlpool.isec.blinkytape.renderers.Segment;
-
-import jssc.SerialPortException;
+import com.whirlpool.isec.blinkytape.serial.BTSerialException;
+import com.whirlpool.isec.blinkytape.strips.AbstractStrip;
 
 public class TapeRenderer implements Runnable {
-  public TapeRenderer(BlinkyTape tape) {
+  public TapeRenderer(AbstractStrip tape) {
     super();
     Util.setupConverters();
     this.tape = tape;
   }
   static Logger logger = LoggerFactory.getLogger(TapeRenderer.class);
   
-  private BlinkyTape tape = null;
+  private AbstractStrip tape = null;
 
   private boolean dieFlag = false;
 
@@ -37,7 +37,7 @@ public class TapeRenderer implements Runnable {
         int i = 0;
         tape.clear();
         boolean needToActuallyUpdate = false;
-        for (Segment<?> segment: EmbeddedServer.config.getSegments()) {
+        for (Segment<?> segment: tape.getTapeConfig().getSegments()) {
           boolean thisSegmentIsDirty = false;
           if (!segment.isBlinkyTapeVersionCurrent()) {
             thisSegmentIsDirty = true;
@@ -56,12 +56,13 @@ public class TapeRenderer implements Runnable {
           tape.updateTape();
         }
 
+        // need to handle serial port errors inside updateTape
         try {
           long delayAlreadyBlown = (System.currentTimeMillis() - t0);
           long delayForThisGo = delay - delayAlreadyBlown;
           if (delayForThisGo < 0) {
             logger.warn("well, it's {}ms too late!", Math.abs(delayForThisGo));
-            tape.reset();
+            // tape.reset();
           } else {
             long t10 = System.currentTimeMillis();
             Thread.sleep(delayForThisGo);
@@ -76,7 +77,7 @@ public class TapeRenderer implements Runnable {
         if (dieFlag)
           break;
       }
-    } catch (SerialPortException ex) {
+    } catch (BTSerialException ex) {
       ex.printStackTrace();
     } finally {
     }

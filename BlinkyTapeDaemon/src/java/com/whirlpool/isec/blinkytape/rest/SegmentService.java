@@ -45,7 +45,7 @@ public class SegmentService {
   public String setSegment (String s, MultivaluedMap<String, String> m) {
     Util.setupConverters();
     logger.info("s={}, qp={}", s, m);
-    Segment<?> segment = EmbeddedServer.config.getSegment(s);
+    Segment<?> segment = EmbeddedServer.config.getNamedSegment(s);
     if (segment == null) {
       logger.error("Cannot find segment {}", s);
       throw new WebApplicationException("Cannot find '" + s + "'", 400);

@@ -26,7 +26,7 @@ public class Util {
     @Override
     protected Object convertToType(@SuppressWarnings("rawtypes") Class type, Object value) throws Throwable {
       Object o = new ColorParam(value.toString());
-      logger.info("{} -> {}", value, o);
+      logger.debug("{} -> {}", value, o);
       return o;
     }
 

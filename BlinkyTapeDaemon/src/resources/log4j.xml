@@ -42,8 +42,12 @@
 		<level value="DEBUG"></level>
 	</logger>
 	
-	<logger name="com.whirlpool.isec.blinkytape.rest.BService">
+	<logger name="com.whirlpool.isec.blinkytape.rest.SegmentService">
 	  <level value="DEBUG"/>
+	</logger>
+	
+	<logger name="org.apache.commons.digester3">
+	  <level value="INFO"/>
 	</logger>
 
 	<root>
