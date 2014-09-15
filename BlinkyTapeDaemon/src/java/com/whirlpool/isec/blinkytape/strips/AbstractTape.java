@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.whirlpool.isec.blinkytape.config.TapeConfig;
 
-abstract public class AbstractStrip {
+abstract public class AbstractTape {
   Logger logger = LoggerFactory.getLogger(getClass());
   
   private final static int length = 60;
@@ -16,7 +16,7 @@ abstract public class AbstractStrip {
   
   private TapeConfig tapeConfig;
 
-  public AbstractStrip(TapeConfig tapeConfig) {
+  public AbstractTape(TapeConfig tapeConfig) {
     this.tapeConfig = tapeConfig;
   }
 

@@ -10,7 +10,6 @@ import javax.ws.rs.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.whirlpool.isec.blinkytape.EmbeddedServer;
 import com.whirlpool.isec.blinkytape.Util;
 import com.whirlpool.isec.blinkytape.config.Config;
 import com.whirlpool.isec.blinkytape.renderers.Segment;

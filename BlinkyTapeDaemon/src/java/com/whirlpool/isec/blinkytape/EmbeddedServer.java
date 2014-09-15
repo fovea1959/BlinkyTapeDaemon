@@ -100,7 +100,8 @@ public class EmbeddedServer {
     
     LocalBlinkyTape tape = new LocalBlinkyTape(tapeConfig);
 
-    tapeRenderer = new TapeRenderer(tape);
+    tapeRenderer = new TapeRenderer();
+    tapeRenderer.addTape(tape);
     Thread tapeThread = new Thread(tapeRenderer);
 
     tapeThread.start();

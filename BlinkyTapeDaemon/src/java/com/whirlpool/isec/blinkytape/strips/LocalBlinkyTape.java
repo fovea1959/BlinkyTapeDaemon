@@ -8,7 +8,7 @@ import com.whirlpool.isec.blinkytape.serial.BTSerial;
 import com.whirlpool.isec.blinkytape.serial.BTSerialException;
 import com.whirlpool.isec.blinkytape.serial.BTSerialJssc;
 
-public class LocalBlinkyTape extends AbstractStrip {
+public class LocalBlinkyTape extends AbstractTape {
   private BTSerial btSerial;
 
   public LocalBlinkyTape(TapeConfig tapeConfig) throws BTSerialException {
