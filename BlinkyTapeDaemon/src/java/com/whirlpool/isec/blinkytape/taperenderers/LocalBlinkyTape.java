@@ -1,7 +1,6 @@
 package com.whirlpool.isec.blinkytape.taperenderers;
 
 import java.awt.Color;
-import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

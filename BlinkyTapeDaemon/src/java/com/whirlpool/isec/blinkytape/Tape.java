@@ -13,6 +13,7 @@ import com.whirlpool.isec.blinkytape.taperenderers.ITapeRenderer;
 
 public class Tape implements Runnable {
   static Logger logger = LoggerFactory.getLogger(Tape.class);
+  static Logger timingLogger = LoggerFactory.getLogger(Tape.class.getName() + ".Timing");
 
   private final int length = 60;
 
@@ -57,6 +58,7 @@ public class Tape implements Runnable {
             setColor(i++, c);
           }
         }
+        long tAtEvaluation = System.currentTimeMillis();
         // force an update every 2 seconds regardless
         if (t0 - timeOfLastTapeUpdate > 2000) {
           logger.debug("forcing an update");
@@ -67,27 +69,28 @@ public class Tape implements Runnable {
             iTapeRenderer.update(leds);
           }
         }
+        long tAfterUpdate = System.currentTimeMillis();
 
         // need to handle serial port errors inside updateTape
+        long tSlept = 0, tSleepWanted = 0;
         try {
           long delayAlreadyBlown = (System.currentTimeMillis() - t0);
-          long delayForThisGo = delay - delayAlreadyBlown;
-          if (delayForThisGo < 0) {
-            logger.warn("well, it's {}ms too late!", Math.abs(delayForThisGo));
+          tSleepWanted = delay - delayAlreadyBlown;
+          if (tSleepWanted < 0) {
+            logger.warn("well, it's {}ms too late!", Math.abs(tSleepWanted));
             Thread.sleep(3); // wait a few anyway to let the tape catch up
             // tape.reset();
           } else {
             long t10 = System.currentTimeMillis();
-            logger.debug("sleeping for {}", delayForThisGo);
-            Thread.sleep(delayForThisGo);
+            Thread.sleep(tSleepWanted);
             long t11 = System.currentTimeMillis();
-            logger.debug("slept for {}", t11 - t10);
+            tSlept = t11 - t10;
           }
         } catch (InterruptedException ex) {
           logger.warn("sleep interrupted");
         }
         long tfinal = System.currentTimeMillis();
-        logger.debug("this loop took {}, wanted {}", tfinal - t0, delay);
+        if ((tfinal - t0) > (delay * 1.1)) timingLogger.debug("this loop took {}, eval {}, update {}, slept {} (wanted {})", tfinal - t0, tAtEvaluation - t0, tAfterUpdate - tAtEvaluation, tSlept, tSleepWanted);
         if (dieFlag)
           break;
       }
