@@ -1,4 +1,4 @@
-package com.whirlpool.isec.blinkytape.renderers;
+package com.whirlpool.isec.blinkytape.segmentrenderers;
 import org.slf4j.*;
 
 @SuppressWarnings("rawtypes")

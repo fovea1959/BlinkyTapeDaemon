@@ -38,8 +38,12 @@
 		<level value="INFO"></level>
 	</logger>
 	
-	<logger name="com.whirlpool.isec.blinkytape.BlinkyTape.serial">
-		<level value="DEBUG"></level>
+	<logger name="com.whirlpool.isec.blinkytape.Tape">
+		<level value="INFO"></level>
+	</logger>
+	
+	<logger name="com.whirlpool.isec.blinkytape.serial">
+		<level value="INFO"></level>
 	</logger>
 	
 	<logger name="com.whirlpool.isec.blinkytape.rest.SegmentService">

@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.whirlpool.isec.blinkytape.Util;
 import com.whirlpool.isec.blinkytape.config.Config;
-import com.whirlpool.isec.blinkytape.renderers.Segment;
+import com.whirlpool.isec.blinkytape.segmentrenderers.Segment;
 
 @Path("/segment")
 public class SegmentService {

@@ -1,4 +1,4 @@
-package com.whirlpool.isec.blinkytape.renderers;
+package com.whirlpool.isec.blinkytape.segmentrenderers;
 
 import java.awt.Color;
 import java.util.*;

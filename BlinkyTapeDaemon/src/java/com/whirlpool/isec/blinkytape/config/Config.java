@@ -2,7 +2,7 @@ package com.whirlpool.isec.blinkytape.config;
 
 import java.util.*;
 
-import com.whirlpool.isec.blinkytape.renderers.Segment;
+import com.whirlpool.isec.blinkytape.segmentrenderers.Segment;
 
 public class Config {
 
@@ -36,7 +36,6 @@ public class Config {
           namedSegments.put(segment.getName(), segment);
       }
     }
-
   }
 
   @SuppressWarnings("rawtypes")

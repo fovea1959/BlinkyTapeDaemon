@@ -1,30 +1,38 @@
-package com.whirlpool.isec.blinkytape.strips;
+package com.whirlpool.isec.blinkytape.taperenderers;
 
 import java.awt.Color;
+import java.util.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.whirlpool.isec.blinkytape.Util;
-import com.whirlpool.isec.blinkytape.config.TapeConfig;
 import com.whirlpool.isec.blinkytape.serial.BTSerial;
 import com.whirlpool.isec.blinkytape.serial.BTSerialException;
 import com.whirlpool.isec.blinkytape.serial.BTSerialJssc;
 
-public class LocalBlinkyTape extends AbstractTape {
+public class LocalBlinkyTape implements ITapeRenderer {
+  static Logger logger = LoggerFactory.getLogger(LocalBlinkyTape.class);
   private BTSerial btSerial;
+  
+  private boolean reverse = false;
 
-  public LocalBlinkyTape(TapeConfig tapeConfig) throws BTSerialException {
-    super(tapeConfig);
+  public LocalBlinkyTape() throws BTSerialException {
+    super();
     btSerial = new BTSerialJssc();
     send255();
   }
 
-  @Override
-  public void updateTape() throws BTSerialException {
+  public void update(Color[] leds) throws BTSerialException {
     long fiddleTime = 0;
-    byte[] bytes = new byte[getLength() * 3];
+    int n = leds.length;
+    byte[] bytes = new byte[n * 3];
     int bindex = 0;
-    for (int i = 0; i < getLength(); i++) {
+    for (int i = 0; i < n; i++) {
       long t0 = System.currentTimeMillis();
-      Color c = getColorAccountingForReverse(i);
+      int ii = i;
+      if (reverse) ii = (n - 1) - i;
+      Color c = leds[ii];
       if (c == null)
         c = Color.BLACK;
       int r, g, b;
@@ -73,10 +81,8 @@ public class LocalBlinkyTape extends AbstractTape {
     logger.debug("update breakdown: fiddling={}, sending={}", fiddleTime, sendTime);
   }
 
-  @Override
   public void close() throws BTSerialException {
     btSerial.close();
-    super.close();
   }
 
   void send255() throws BTSerialException {
@@ -98,6 +104,14 @@ public class LocalBlinkyTape extends AbstractTape {
       Thread.sleep(3);
     } catch (InterruptedException ex) {
     }
+  }
+
+  public boolean isReverse() {
+    return reverse;
+  }
+
+  public void setReverse(boolean reverse) {
+    this.reverse = reverse;
   }
 
 }

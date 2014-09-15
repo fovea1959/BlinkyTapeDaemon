@@ -3,13 +3,14 @@ package com.whirlpool.isec.blinkytape.config;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.whirlpool.isec.blinkytape.renderers.Segment;
-import com.whirlpool.isec.blinkytape.renderers.SegmentParameters;
+import com.whirlpool.isec.blinkytape.segmentrenderers.Segment;
+import com.whirlpool.isec.blinkytape.segmentrenderers.SegmentParameters;
+import com.whirlpool.isec.blinkytape.taperenderers.ITapeRenderer;
 
 public class TapeConfig {
   private String name;
 
-  private boolean reverse;
+  private List<ITapeRenderer> tapeRenderers = new ArrayList<ITapeRenderer>();
 
   @SuppressWarnings("rawtypes")
   private List<Segment<? extends SegmentParameters>> segments = new ArrayList<Segment<? extends SegmentParameters>>();
@@ -18,17 +19,9 @@ public class TapeConfig {
   public List<Segment<? extends SegmentParameters>> getSegments() {
     return segments;
   }
-
+  
   public String getName() {
     return name;
-  }
-
-  public boolean isReverse() {
-    return reverse;
-  }
-
-  public void setReverse(boolean reverse) {
-    this.reverse = reverse;
   }
 
   public void setName(String name) {
@@ -39,11 +32,18 @@ public class TapeConfig {
   public void addSegment(Segment<? extends SegmentParameters> segment) {
     segments.add(segment);
   }
+  
+  public void addTapeRenderer(ITapeRenderer tapeRenderer) {
+    tapeRenderers.add(tapeRenderer);
+  }
+
+  public List<ITapeRenderer> getTapeRenderers() {
+    return tapeRenderers;
+  }
 
   @Override
   public String toString() {
-    return String.format("TapeConfig [name=%s, reverse=%s, segments=%s]", name, reverse,
-        segments);
+    return String.format("TapeConfig [name=%s, segments=%s]", name, segments);
   }
 
 }

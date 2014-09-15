@@ -24,13 +24,10 @@ import org.xml.sax.SAXException;
 
 import com.whirlpool.isec.blinkytape.config.Config;
 import com.whirlpool.isec.blinkytape.config.TapeConfig;
-import com.whirlpool.isec.blinkytape.strips.LocalBlinkyTape;
 
 public class EmbeddedServer {
   public static Logger logger = LoggerFactory.getLogger(EmbeddedServer.class);
 
-  public static TapeRenderer tapeRenderer = null;
-  
   private final static Config config = Config.getInstance();
 
   /**
@@ -98,17 +95,15 @@ public class EmbeddedServer {
     // need to look at configuration and make the proper tapes from config. Perhaps methods in tapeconfig
     // get moved to AbstractTape?
     
-    LocalBlinkyTape tape = new LocalBlinkyTape(tapeConfig);
+    Tape tape = new Tape(tapeConfig);
 
-    tapeRenderer = new TapeRenderer();
-    tapeRenderer.addTape(tape);
-    Thread tapeThread = new Thread(tapeRenderer);
+    Thread tapeThread = new Thread(tape);
 
     tapeThread.start();
 
     try {
       System.in.read();
-      tapeRenderer.setDieFlag(true);
+      tape.setDieFlag(true);
       tapeThread.join();
       tape.close();
       server.stop();

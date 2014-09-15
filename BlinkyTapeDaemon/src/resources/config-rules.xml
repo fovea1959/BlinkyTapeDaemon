@@ -13,21 +13,26 @@
 		<set-next-rule methodname="addTapeConfig" />
 	</pattern>
 
+	<pattern value="*/local">
+		<object-create-rule classname="com.whirlpool.isec.blinkytape.taperenderers.LocalBlinkyTape" />
+		<set-properties-rule />
+		<set-next-rule methodname="addTapeRenderer" />
+	</pattern>
+
 	<pattern value="*/bar">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.SegmentBar" />
+		<object-create-rule classname="com.whirlpool.isec.blinkytape.segmentrenderers.SegmentBar" />
 		<set-properties-rule />
 		<set-next-rule methodname="addSegment" />
 	</pattern>
 
-
 	<pattern value="*/marker">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.Marker" />
+		<object-create-rule classname="com.whirlpool.isec.blinkytape.segmentrenderers.Marker" />
 		<set-properties-rule />
 		<set-next-rule methodname="addSegment" />
 	</pattern>
 
 	<pattern value="*/solid">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.SegmentSolid" />
+		<object-create-rule classname="com.whirlpool.isec.blinkytape.segmentrenderers.SegmentSolid" />
 		<set-properties-rule />
 		<set-next-rule methodname="addSegment" />
 	</pattern>

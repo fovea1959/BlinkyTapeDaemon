@@ -1,4 +1,4 @@
-package com.whirlpool.isec.blinkytape.renderers;
+package com.whirlpool.isec.blinkytape.segmentrenderers;
 
 public class MarkerParameters extends SegmentParameters<Marker>{
 
