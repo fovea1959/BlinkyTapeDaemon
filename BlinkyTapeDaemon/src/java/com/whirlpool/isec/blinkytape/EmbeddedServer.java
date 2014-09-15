@@ -48,8 +48,26 @@ public class EmbeddedServer {
 
     Util.setupConverters();
 
+    Throwable boom = null;
+    try {
+      EmbeddedServer embeddedServer = new EmbeddedServer();
+      embeddedServer.go();
+    } catch (Exception ex) {
+      boom = ex;
+    }
+
+    if (boom != null) {
+      logger.error("Died!", boom);
+      System.exit(1);
+    } else {
+      System.exit(0);
+    }
+  }
+
+  void go() throws Exception {
+
     config();
-    
+
     // System.exit(0);
 
     Server server = new Server();
@@ -87,34 +105,38 @@ public class EmbeddedServer {
         e.printStackTrace();
       }
     }
-    
+
     // Need to test this
-    
+
     TapeConfig tapeConfig = config.getTapeConfigs().get(0);
 
-    // need to look at configuration and make the proper tapes from config. Perhaps methods in tapeconfig
+    // need to look at configuration and make the proper tapes from config.
+    // Perhaps methods in tapeconfig
     // get moved to AbstractTape?
-    
+
     Tape tape = new Tape(tapeConfig);
 
     Thread tapeThread = new Thread(tape);
 
     tapeThread.start();
 
-    try {
-      System.in.read();
-      tape.setDieFlag(true);
-      tapeThread.join();
-      tape.close();
-      server.stop();
-      server.join();
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.exit(100);
+    while (!config.isShutdownRequested()) {
+      // TODO figure out shutdown here
+      try {
+        Thread.sleep(100);
+      } catch (InterruptedException ex) {
+        //
+      }
     }
+
+    tape.setDieFlag(true);
+    tapeThread.join();
+    tape.close();
+    server.stop();
+    server.join();
   }
 
-  public static void config() {
+  public static void config() throws IOException, SAXException {
     // ConvertUtils.register(new ColorConverter(), Color.class);
     Config config = Config.getInstance();
 
@@ -122,14 +144,8 @@ public class EmbeddedServer {
     Digester digester = loader.newDigester();
 
     digester.push(config);
-    try {
-      digester.parse(new File("config.xml"));
-    } catch (IOException e) {
-      logger.warn("Could not load file", e);
-    } catch (SAXException e) {
-      logger.warn("Invalid file", e);
-    }
-    
+    digester.parse(new File("config.xml"));
+
     config.postParse();
 
     System.out.println(config);

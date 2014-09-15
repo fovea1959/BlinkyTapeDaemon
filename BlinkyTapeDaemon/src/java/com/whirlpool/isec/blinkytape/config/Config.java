@@ -6,6 +6,13 @@ import com.whirlpool.isec.blinkytape.segmentrenderers.Segment;
 
 public class Config {
 
+  private List<TapeConfig> tapeConfigs = new ArrayList<TapeConfig>();
+
+  @SuppressWarnings("rawtypes")
+  private Map<String, Segment> namedSegments = new HashMap<String, Segment>();
+  
+  private boolean shutdownRequested = false;
+
   static private Config instance = new Config();
 
   static public Config getInstance() {
@@ -14,11 +21,6 @@ public class Config {
 
   private Config() {
   }
-
-  private List<TapeConfig> tapeConfigs = new ArrayList<TapeConfig>();
-
-  @SuppressWarnings("rawtypes")
-  private Map<String, Segment> namedSegments = new HashMap<String, Segment>();
 
   public void addTapeConfig(TapeConfig tapeConfig) {
     tapeConfigs.add(tapeConfig);
@@ -46,5 +48,13 @@ public class Config {
   @Override
   public String toString() {
     return String.format("Config %s", tapeConfigs);
+  }
+
+  public boolean isShutdownRequested() {
+    return shutdownRequested;
+  }
+
+  public void setShutdownRequested(boolean shutdownRequested) {
+    this.shutdownRequested = shutdownRequested;
   }
 }

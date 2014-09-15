@@ -5,15 +5,18 @@
   <local reverse="true" />
 
   <marker colorOff="#000010" colorOn="black" />
-  <bar name="a" length="10" color="blue" />
+  <bar name="prod_new_rt" color="#004040" length="20" />
   <marker colorOff="#000010" colorOn="black" />
-  <bar name="b" length="10" />
+  <bar name="wegscd-linux-cpu" color="#404000" length="10" />
   <marker colorOff="#000010" colorOn="black" />
-  <solid name="c" length="5" color="#101010" />
+  <bar name="adculsplunkp1-cpu" color="#404000" length="10" />
   <marker colorOff="#000010" colorOn="black" />
-  <bar name="prod_new_rt" color="#004000" length="20" />
+  <bar name="a" length="3" color="blue" />
+  <marker colorOff="#000010" colorOn="black" />
+  <bar name="b" length="3" />
+  <marker colorOff="#000010" colorOn="black" />
+  <static length="5" />
   <!-- gotta be a little funny -->
   <marker colorOn="#000800" colorOff="#080000" period="1000" duty="0.5" />
-  <marker colorOff="#000010" colorOn="black" />
  </tape>
 </config>

@@ -57,7 +57,7 @@ abstract public class Segment<P extends SegmentParameters> {
 
   public void setValues(MultivaluedMap<String, String> m) {
     // ConvertUtils.register(new ColorConverter(), Color.class);
-    logger.info("Converter = {}", BeanUtilsBean.getInstance());
+    logger.debug("Converter = {}", BeanUtilsBean.getInstance());
     logger.debug("incoming = {}", m.toString());
     logger.debug("before = {}", getParameters().toString());
     for (String name : m.keySet()) {
@@ -98,6 +98,10 @@ abstract public class Segment<P extends SegmentParameters> {
   }
   
   public void markChanged() {
-    lastChangedAt = System.currentTimeMillis();
+    markChanged(System.currentTimeMillis());
+  }
+  
+  public void markChanged(long when) {
+    lastChangedAt = when;
   }
 }

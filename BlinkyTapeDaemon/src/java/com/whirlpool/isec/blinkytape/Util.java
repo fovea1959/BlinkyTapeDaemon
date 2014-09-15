@@ -17,9 +17,11 @@ public class Util {
 
   public static void setupConverters() {
     ConvertUtilsBean convertUtilsBean = BeanUtilsBean.getInstance().getConvertUtils();
-    convertUtilsBean.register(new ColorConverter(), Color.class);
-    logger.info("Setting up converter {} on thread {}", BeanUtilsBean.getInstance(),
-        Thread.currentThread());
+    if (convertUtilsBean.lookup(Color.class) == null) {
+      convertUtilsBean.register(new ColorConverter(), Color.class);
+      logger.info("Setting up converter {} on thread {}", BeanUtilsBean.getInstance(),
+          Thread.currentThread());
+    }
   }
 
   static class ColorConverter extends AbstractConverter {

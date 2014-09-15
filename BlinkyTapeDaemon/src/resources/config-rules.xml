@@ -37,4 +37,10 @@
 		<set-next-rule methodname="addSegment" />
 	</pattern>
 
+	<pattern value="*/static">
+		<object-create-rule classname="com.whirlpool.isec.blinkytape.segmentrenderers.SegmentOfStatic" />
+		<set-properties-rule />
+		<set-next-rule methodname="addSegment" />
+	</pattern>
+
 </digester-rules>

@@ -1,9 +1,6 @@
 package com.whirlpool.isec.blinkytape.rest;
 
-/**
- * @author Crunchify.com
- */
-
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
@@ -12,36 +9,42 @@ import org.slf4j.LoggerFactory;
 
 import com.whirlpool.isec.blinkytape.Util;
 import com.whirlpool.isec.blinkytape.config.Config;
+import com.whirlpool.isec.blinkytape.rest.NoRepeater.NoRepeaterResult;
 import com.whirlpool.isec.blinkytape.segmentrenderers.Segment;
 
-@Path("/segment")
+@Path("/segment/{s}")
 public class SegmentService {
   static Logger logger = LoggerFactory.getLogger(SegmentService.class);
   
   static Config config = Config.getInstance();
+  
+  static NoRepeater noRepeater = new NoRepeater(5 * 60 * 1000, "Unable to find segment %s");
 
-  @Path("{s}")
   @GET
   @Produces("application/xml")
-  public String setSegmentGet(@PathParam("s") String s, @Context UriInfo ui) {
+  public String setSegmentGet(@PathParam("s") String s, @Context UriInfo ui, @Context HttpServletRequest httpRequest) {
     MultivaluedMap<String, String> m = ui.getQueryParameters();
-    return setSegment(s, m);
+    return setSegment(s, m, httpRequest);
   }
   
-  @Path("{s}")
   @POST
   @Consumes("application/x-www-form-urlencoded")
   @Produces("application/xml")
-  public String setSegmentPost(@PathParam("s") String s, MultivaluedMap<String, String> m) {
-    return setSegment(s, m);
+  public String setSegmentPost(@PathParam("s") String s, MultivaluedMap<String, String> m, @Context HttpServletRequest httpRequest) {
+    return setSegment(s, m, httpRequest);
   }
   
-  public String setSegment (String s, MultivaluedMap<String, String> m) {
+  public String setSegment (String s, MultivaluedMap<String, String> m, HttpServletRequest h) {
     Util.setupConverters();
-    logger.info("s={}, qp={}", s, m);
+    String remoteHost = h.getRemoteHost();
+    logger.debug("from={}, s={}, qp={}", s, m);
     Segment<?> segment = Config.getInstance().getNamedSegment(s);
     if (segment == null) {
-      logger.error("Cannot find segment {}", s);
+      // logger.error("Test: unable to find segment {}", s);
+      NoRepeaterResult r = noRepeater.somethingHappened(s + "@" + remoteHost);
+      if (r != null) {
+        logger.error(r.message());
+      }
       throw new WebApplicationException("Cannot find '" + s + "'", 400);
     }
     segment.setValues(m);
