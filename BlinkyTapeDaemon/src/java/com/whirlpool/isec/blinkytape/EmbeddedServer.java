@@ -24,15 +24,14 @@ import org.xml.sax.SAXException;
 
 import com.whirlpool.isec.blinkytape.config.Config;
 import com.whirlpool.isec.blinkytape.config.TapeConfig;
-import com.whirlpool.isec.blinkytape.renderers.KeeptheStripAlive;
 import com.whirlpool.isec.blinkytape.strips.LocalBlinkyTape;
 
 public class EmbeddedServer {
   public static Logger logger = LoggerFactory.getLogger(EmbeddedServer.class);
 
   public static TapeRenderer tapeRenderer = null;
-
-  public static Config config = new Config();
+  
+  private final static Config config = Config.getInstance();
 
   /**
    * @param args
@@ -121,7 +120,7 @@ public class EmbeddedServer {
 
   public static void config() {
     // ConvertUtils.register(new ColorConverter(), Color.class);
-    config = new Config();
+    Config config = Config.getInstance();
 
     DigesterLoader loader = DigesterLoader.newLoader(new MyRulesModule());
     Digester digester = loader.newDigester();
@@ -134,9 +133,6 @@ public class EmbeddedServer {
     } catch (SAXException e) {
       logger.warn("Invalid file", e);
     }
-    
-    for (TapeConfig tapeConfig : config.getTapeConfigs())
-    tapeConfig.addSegment(new KeeptheStripAlive());
     
     config.postParse();
 

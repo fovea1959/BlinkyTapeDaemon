@@ -18,12 +18,12 @@ public class SegmentSolid extends Segment<SegmentSolidParameters> {
   }
   
   public void setColor(Color color) {
-    logger.info ("setting color on {} to {}", this, color);
+    logger.debug ("setting color on {} to {}", this, color);
     this.color = color;
   }
 
   @Override
-  public List<Color> getLedsForInformation() {
+  public List<Color> getLeds() {
     List<Color> rv = new ArrayList<Color>(getLength());
     for (int i = 0; i < getLength(); i++) {
       Color c = getParameters().getColor();

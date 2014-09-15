@@ -13,7 +13,7 @@ import com.whirlpool.isec.blinkytape.strips.AbstractStrip;
 public class TapeRenderer implements Runnable {
   public TapeRenderer(AbstractStrip tape) {
     super();
-    Util.setupConverters();
+    //Util.setupConverters();
     this.tape = tape;
   }
   static Logger logger = LoggerFactory.getLogger(TapeRenderer.class);
@@ -31,19 +31,21 @@ public class TapeRenderer implements Runnable {
   @Override
   public void run() {
     try {
+      long timeOfLastTapeUpdate = 0;
       while (true) {
         long t0 = System.currentTimeMillis();
         //logger.info("top of loop");
         int i = 0;
         tape.clear();
-        boolean needToActuallyUpdate = false;
+        boolean needToUpdateTheTape = false;
         for (Segment<?> segment: tape.getTapeConfig().getSegments()) {
           boolean thisSegmentIsDirty = false;
-          if (!segment.isBlinkyTapeVersionCurrent()) {
+          long timeOfLastSegmentUpdate = segment.getLastTimeUpdated();
+          if (timeOfLastSegmentUpdate > timeOfLastTapeUpdate) {
             thisSegmentIsDirty = true;
-            needToActuallyUpdate = true;
+            needToUpdateTheTape = true;
           }
-          Collection<Color> cs = segment.getLedsForBlinkyTape();
+          Collection<Color> cs = segment.getLeds();
           if (thisSegmentIsDirty) {
             logger.debug("{} thought we should update, and presents colors {}", segment.getName(), cs);
           }
@@ -51,8 +53,12 @@ public class TapeRenderer implements Runnable {
             tape.setColor(i++, c);
           }
         }
-        if (needToActuallyUpdate) {
-          logger.debug("updating tape");
+        // force an update every 2 seconds regardless
+        if (t0 - timeOfLastTapeUpdate > 2000) {
+          logger.debug("forcing an update");
+          needToUpdateTheTape = true;
+        }
+        if (needToUpdateTheTape) {
           tape.updateTape();
         }
 
@@ -62,6 +68,7 @@ public class TapeRenderer implements Runnable {
           long delayForThisGo = delay - delayAlreadyBlown;
           if (delayForThisGo < 0) {
             logger.warn("well, it's {}ms too late!", Math.abs(delayForThisGo));
+            Thread.sleep(3); // wait a few anyway to let the tape catch up
             // tape.reset();
           } else {
             long t10 = System.currentTimeMillis();

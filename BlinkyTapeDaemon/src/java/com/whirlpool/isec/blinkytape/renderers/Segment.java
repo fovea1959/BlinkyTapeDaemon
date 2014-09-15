@@ -20,7 +20,7 @@ abstract public class Segment<P extends SegmentParameters> {
 
   private Integer length;
   
-  boolean blinkyTapeVersionCurrent = true;
+  long lastChangedAt = 0;
 
   private P parameters;
 
@@ -66,7 +66,7 @@ abstract public class Segment<P extends SegmentParameters> {
     }
     logger.debug("after  = {}", getParameters().toString());
     // a fair bet here
-    blinkyTapeVersionIsNowObsoleteWarningWillRobinsonWarning();
+    lastChangedAt = System.currentTimeMillis();
   }
 
   public void setValue(String name, String v) {
@@ -82,27 +82,22 @@ abstract public class Segment<P extends SegmentParameters> {
     }
   }
 
-  abstract public List<Color> getLedsForInformation();
-  
-  final public List<Color> getLedsForBlinkyTape() {
-    blinkyTapeVersionCurrent = true;
-    return getLedsForInformation();
-  }
-  
-  public final void blinkyTapeVersionIsNowObsoleteWarningWillRobinsonWarning() {
-    blinkyTapeVersionCurrent = false;
-  }
-  
-  public final boolean isBlinkyTapeVersionCurrent() {
-    gazeAtMyNavelAmIReallyCurrent();
-    return blinkyTapeVersionCurrent;
-  }
+  abstract public List<Color> getLeds();
   
   public void gazeAtMyNavelAmIReallyCurrent() {
   }
-
+  
   @Override
   public String toString() {
     return String.format("%s [name=%s, length=%s]", super.toString(), name, length);
+  }
+
+  public long getLastTimeUpdated() {
+    gazeAtMyNavelAmIReallyCurrent();
+    return lastChangedAt;
+  }
+  
+  public void markChanged() {
+    lastChangedAt = System.currentTimeMillis();
   }
 }

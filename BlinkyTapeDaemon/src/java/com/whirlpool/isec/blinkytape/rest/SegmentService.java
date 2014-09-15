@@ -4,27 +4,22 @@ package com.whirlpool.isec.blinkytape.rest;
  * @author Crunchify.com
  */
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.whirlpool.isec.blinkytape.EmbeddedServer;
 import com.whirlpool.isec.blinkytape.Util;
+import com.whirlpool.isec.blinkytape.config.Config;
 import com.whirlpool.isec.blinkytape.renderers.Segment;
 
 @Path("/segment")
 public class SegmentService {
   static Logger logger = LoggerFactory.getLogger(SegmentService.class);
+  
+  static Config config = Config.getInstance();
 
   @Path("{s}")
   @GET
@@ -45,7 +40,7 @@ public class SegmentService {
   public String setSegment (String s, MultivaluedMap<String, String> m) {
     Util.setupConverters();
     logger.info("s={}, qp={}", s, m);
-    Segment<?> segment = EmbeddedServer.config.getNamedSegment(s);
+    Segment<?> segment = Config.getInstance().getNamedSegment(s);
     if (segment == null) {
       logger.error("Cannot find segment {}", s);
       throw new WebApplicationException("Cannot find '" + s + "'", 400);

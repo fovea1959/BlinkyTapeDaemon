@@ -12,7 +12,7 @@ public class SegmentBar extends SegmentSolid {
   }
 
   @Override
-  public List<Color> getLedsForInformation() {
+  public List<Color> getLeds() {
     List<Color> rv = new ArrayList<Color>(getLength());
     double value = ((SegmentBarParameters) getParameters()).getValue();
     boolean over = false;

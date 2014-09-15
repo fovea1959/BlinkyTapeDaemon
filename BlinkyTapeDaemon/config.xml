@@ -10,6 +10,7 @@
 		<marker colorOff="#000010" colorOn="black" />
 		<bar name="prod_new_rt" color="#004000" length="20" />
 		<!-- gotta be a little funny -->
-		<marker colorOn="#000800" colorOff="#080000" />
+		<marker colorOn="#000800" colorOff="#080000" period="1000" duty="0.5" />
+		<marker colorOff="#000010" colorOn="black" />
 	</tape>
 </config>

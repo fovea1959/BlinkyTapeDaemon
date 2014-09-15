@@ -2,9 +2,7 @@ package com.whirlpool.isec.blinkytape.serial;
 
 import org.slf4j.*;
 
-import jssc.SerialPort;
-import jssc.SerialPortException;
-import jssc.SerialPortList;
+import jssc.*;
 
 public class BTSerialJssc extends BTSerial {
   static Logger logger = LoggerFactory.getLogger(BTSerialJssc.class);
@@ -40,7 +38,8 @@ public class BTSerialJssc extends BTSerial {
     logger.debug("writing {} bytes", bytes.length);
     try {
       boolean ok = serialPort.writeBytes(bytes);
-      if (!ok) throw new RuntimeException("writeBytes() failed");
+      if (!ok)
+        throw new RuntimeException("writeBytes() failed");
     } catch (SerialPortException e) {
       throw new BTSerialException(e);
     }
@@ -51,7 +50,19 @@ public class BTSerialJssc extends BTSerial {
     logger.debug("writing byte {}", (int) b & 0xFF);
     try {
       boolean ok = serialPort.writeByte(b);
-      if (!ok) throw new RuntimeException("writeBytes() failed");
+      if (!ok)
+        throw new RuntimeException("writeBytes() failed");
+    } catch (SerialPortException e) {
+      throw new BTSerialException(e);
+    }
+  }
+
+  public byte[] readAvailableBytes() throws BTSerialException {
+    try {
+      byte[] rv = new byte[0];
+      int i = serialPort.getInputBufferBytesCount();
+      if (i > 0) rv = serialPort.readBytes(i);
+      return rv;
     } catch (SerialPortException e) {
       throw new BTSerialException(e);
     }
@@ -83,6 +94,11 @@ public class BTSerialJssc extends BTSerial {
     } catch (SerialPortException e) {
       throw new BTSerialException(e);
     }
+  }
+  
+  @Override
+  public String getPortName() {
+    return serialPort.getPortName();
   }
 
 }
