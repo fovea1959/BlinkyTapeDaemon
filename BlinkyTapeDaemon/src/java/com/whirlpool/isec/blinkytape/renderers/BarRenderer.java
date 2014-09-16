@@ -47,21 +47,24 @@ public class BarRenderer extends SolidRenderer {
       logger.error("datum {} doesn't contain a color");
     }
 
-    value = calculateLed(value);
-
     if (barColorMapper != null) {
       if (!barColorMapper.isZebra()) {
         Color c = barColorMapper.getColorForValue(value);
+        logger.debug("using non-zebra mapper, {} -> {}", value, c);
         if (c != null)
           datumColor = c;
       }
     }
 
+    double led = calculateLed(value);
+
     boolean over = false;
+    
+    // TODO some zero-based/one-based array ickiness needs fixing 
     for (int i = 1; i <= getLength(); i++) {
       Color c1 = Color.black;
-      if (i <= value) {
-        logger.debug("** {} <= {}", i, value);
+      if (i <= led) {
+        logger.debug("** {} <= {}", i, led);
         if (templateColors != null) {
           c1 = templateColors[i];
         } else {
@@ -69,7 +72,7 @@ public class BarRenderer extends SolidRenderer {
         }
       } else {
         if (!over)
-          logger.debug("{} !<= {}", i, value);
+          logger.debug("{} !<= {}", i, led);
         over = true;
       }
       rv.add(c1);
@@ -82,8 +85,9 @@ public class BarRenderer extends SolidRenderer {
     super.postConfig();
     if (barColorMapper != null) {
       if (barColorMapper.isZebra()) {
-        templateColors = new Color[getLength()];
-        for (int led = 0; led < getLength(); led++) {
+        templateColors = new Color[getLength()+1];
+        // TODO some zero-based/one-based array ickiness needs fixing 
+        for (int led = 1; led <= getLength(); led++) {
           double d = calculateV(led);
           templateColors[led] = barColorMapper.getColorForValue(d);
         }

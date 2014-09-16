@@ -53,7 +53,10 @@ abstract public class AbstractRenderer {
   
   @Override
   public String toString() {
-    return String.format("%s [name=%s, length=%s]", super.toString(), name, length);
+    return "AbstractRenderer [" + (logger != null ? "logger=" + logger + ", " : "")
+        + (name != null ? "name=" + name + ", " : "")
+        + (length != null ? "length=" + length + ", " : "") + "lastChangedAt="
+        + lastChangedAt + "]";
   }
   
   public void markChanged() {
@@ -65,8 +68,11 @@ abstract public class AbstractRenderer {
   }
 
   public long getLastChangedAt() {
-    long rv = Config.getInstance().getDatum(getName()).getLastChangedAt();
-    markChanged();
+    long rv = 0;
+    if (getName() != null) {
+      rv = Config.getInstance().getDatum(getName()).getLastChangedAt();
+    }
+    gazeAtMyNavelAmIReallyCurrent();
     if (lastChangedAt > rv) rv = lastChangedAt;
     return lastChangedAt;
   }

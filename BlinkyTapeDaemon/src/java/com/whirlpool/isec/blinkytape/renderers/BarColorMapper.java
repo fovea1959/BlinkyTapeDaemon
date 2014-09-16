@@ -12,7 +12,7 @@ public class BarColorMapper {
   
   boolean dirty = false;
   public void addRange (BarColorMapperRange range) {
-    logger.info("adding {}", range);
+    logger.debug("adding {}", range);
     ranges.add(range);
     dirty = true;
   }
@@ -27,7 +27,8 @@ public class BarColorMapper {
   
   public Color getColorForValue (Double d) {
     for (BarColorMapperRange r : getRanges()) {
-      if (d <= r.getLimit()) return r.getColor();
+      logger.debug("comparing {} to {}", d, r);
+      if (r.getUpperLimit() == null || d <= r.getUpperLimit()) return r.getColor();
     }
     return null;
   }

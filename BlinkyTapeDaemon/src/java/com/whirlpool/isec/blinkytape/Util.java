@@ -74,6 +74,11 @@ public class Util {
         }
       }
     }
+    
+    @Override
+    public String toString() {
+      return "ColorParam[r=" + getRed() + ",g=" + getGreen() + ",b=" + getBlue() + "]";
+    }
   }
 
   final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();

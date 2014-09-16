@@ -17,7 +17,6 @@ public class MarkerRenderer extends AbstractRenderer {
 
   public MarkerRenderer() {
     super();
-    setName(this.toString());
     super.setLength(1);
   }
 
