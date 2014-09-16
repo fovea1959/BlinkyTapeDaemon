@@ -4,65 +4,108 @@ import java.awt.Color;
 import java.util.*;
 
 import com.whirlpool.isec.blinkytape.config.Config;
-import com.whirlpool.isec.blinkytape.segments.IHasColorProperty;
-import com.whirlpool.isec.blinkytape.segments.IHasNumericValueProperty;
-import com.whirlpool.isec.blinkytape.segments.Segment;
-import com.whirlpool.isec.blinkytape.segments.SegmentWithColorAndNumber;
+import com.whirlpool.isec.blinkytape.data.IHasColorProperty;
+import com.whirlpool.isec.blinkytape.data.IHasNumericValueProperty;
+import com.whirlpool.isec.blinkytape.data.Datum;
+import com.whirlpool.isec.blinkytape.data.DatumWithColorAndNumber;
 
 public class BarRenderer extends SolidRenderer {
   Double min = 0.0;
+
   Double max = 1.0;
+
   boolean round = true;
 
+  BarColorMapper barColorMapper = null;
+
   @Override
-  public SegmentWithColorAndNumber createParametersInstance() {
-    SegmentWithColorAndNumber rv = new SegmentWithColorAndNumber(this.getName());
+  public DatumWithColorAndNumber createDatumInstance() {
+    DatumWithColorAndNumber rv = new DatumWithColorAndNumber(this.getName());
     rv.setColor(this.getColor());
     return rv;
   }
 
+  Color[] templateColors = null;
+
   @Override
   public List<Color> getLeds() {
     List<Color> rv = new ArrayList<Color>(getLength());
-    
-    Segment state = Config.getInstance().getSegmentValue(getName());
-    
+
+    Datum datum = Config.getInstance().getDatum(getName());
+
     Double value = null;
-    if (state instanceof IHasNumericValueProperty) {
-      value = ((IHasNumericValueProperty) state).getValue();
+    if (datum instanceof IHasNumericValueProperty) {
+      value = ((IHasNumericValueProperty) datum).getValue();
     } else {
-      logger.error("state {} doesn't contain a numeric value");
+      logger.error("datum {} doesn't contain a numeric value");
     }
-    
-    Color stateColor = null;
-    if (state instanceof IHasColorProperty) {
-      stateColor = ((IHasColorProperty) state).getColor();
+
+    Color datumColor = null;
+    if (datum instanceof IHasColorProperty) {
+      datumColor = ((IHasColorProperty) datum).getColor();
     } else {
-      logger.error("state {} doesn't contain a color");
+      logger.error("datum {} doesn't contain a color");
     }
-    
-    value = mapValue(value);
+
+    value = calculateLed(value);
+
+    if (barColorMapper != null) {
+      if (!barColorMapper.isZebra()) {
+        Color c = barColorMapper.getColorForValue(value);
+        if (c != null)
+          datumColor = c;
+      }
+    }
+
     boolean over = false;
     for (int i = 1; i <= getLength(); i++) {
       Color c1 = Color.black;
       if (i <= value) {
         logger.debug("** {} <= {}", i, value);
-        c1 = stateColor;
+        if (templateColors != null) {
+          c1 = templateColors[i];
+        } else {
+          c1 = datumColor;
+        }
       } else {
-        if (!over) logger.debug("{} !<= {}", i, value);
+        if (!over)
+          logger.debug("{} !<= {}", i, value);
         over = true;
       }
       rv.add(c1);
     }
     return rv;
   }
-  
-  double mapValue(double v) {
+
+  @Override
+  public void postConfig() {
+    super.postConfig();
+    if (barColorMapper != null) {
+      if (barColorMapper.isZebra()) {
+        templateColors = new Color[getLength()];
+        for (int led = 0; led < getLength(); led++) {
+          double d = calculateV(led);
+          templateColors[led] = barColorMapper.getColorForValue(d);
+        }
+      }
+    }
+  }
+
+  double calculateLed(double v) {
     double rv = ((v - getMin()) / (getMax() - getMin())) * getLength();
-    if (isRound()) rv = Math.round(rv);
+    if (isRound())
+      rv = Math.round(rv);
     return rv;
   }
-  
+
+  double calculateV(int led) {
+    return getMin() + ((led * 1.0 * (getMax() - getMin()) / getLength()));
+  }
+
+  public void setBarColorMapper(BarColorMapper b) {
+    barColorMapper = b;
+  }
+
   public Double getMin() {
     return min;
   }

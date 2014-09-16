@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.whirlpool.isec.blinkytape.NoRepeater.NoRepeaterResult;
 import com.whirlpool.isec.blinkytape.config.TapeConfig;
 import com.whirlpool.isec.blinkytape.renderers.AbstractRenderer;
 import com.whirlpool.isec.blinkytape.serial.BTSerialException;
@@ -33,6 +34,7 @@ public class Tape implements Runnable {
   public void run() {
     try {
       long timeOfLastTapeUpdate = 0;
+      NoRepeater overSlept = new NoRepeater(1000 * 60 * 2, "overslept");
       while (true) {
         long t0 = System.currentTimeMillis();
 
@@ -42,17 +44,17 @@ public class Tape implements Runnable {
         boolean needToUpdateTheTape = false;
         int i = 0;
 
-        for (AbstractRenderer segment : getTapeConfig().getSegments()) {
-          boolean thisSegmentIsDirty = false;
-          long timeOfLastSegmentUpdate = segment.getLastChangedAt();
-          if (timeOfLastSegmentUpdate > timeOfLastTapeUpdate) {
-            thisSegmentIsDirty = true;
+        for (AbstractRenderer renderer : getTapeConfig().getRenderers()) {
+          boolean thisRendererIsDirty = false;
+          long timeOfLastRendererChange = renderer.getLastChangedAt();
+          if (timeOfLastRendererChange > timeOfLastTapeUpdate) {
+            thisRendererIsDirty = true;
             needToUpdateTheTape = true;
           }
-          Collection<Color> cs = segment.getLeds();
-          if (thisSegmentIsDirty) {
+          Collection<Color> cs = renderer.getLeds();
+          if (thisRendererIsDirty) {
             logger.debug("{} thought we should update, and presents colors {}",
-                segment.getName(), cs);
+                renderer.getName(), cs);
           }
           for (Color c : cs) {
             setColor(i++, c);
@@ -65,8 +67,8 @@ public class Tape implements Runnable {
           needToUpdateTheTape = true;
         }
         if (needToUpdateTheTape) {
-          for (ITape iTapeRenderer : tapeConfig.getTapeRenderers()) {
-            iTapeRenderer.update(leds);
+          for (ITape iTape : tapeConfig.getTapes()) {
+            iTape.update(leds);
           }
         }
         long tAfterUpdate = System.currentTimeMillis();
@@ -85,6 +87,11 @@ public class Tape implements Runnable {
             Thread.sleep(tSleepWanted);
             long t11 = System.currentTimeMillis();
             tSlept = t11 - t10;
+            
+            if (tSlept > tSleepWanted) {
+              NoRepeaterResult rr = overSlept.somethingHappened("");
+              if (rr != null) logger.info (rr.message());
+            }
           }
         } catch (InterruptedException ex) {
           logger.warn("sleep interrupted");
@@ -103,8 +110,8 @@ public class Tape implements Runnable {
   }
   
   public void close() {
-    for (ITape iTapeRenderer : tapeConfig.getTapeRenderers()) {
-      iTapeRenderer.close();
+    for (ITape iTape : tapeConfig.getTapes()) {
+      iTape.close();
     }
   }
 

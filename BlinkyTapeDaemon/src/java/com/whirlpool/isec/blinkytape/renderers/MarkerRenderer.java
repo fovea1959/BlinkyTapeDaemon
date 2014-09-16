@@ -3,7 +3,7 @@ package com.whirlpool.isec.blinkytape.renderers;
 import java.awt.Color;
 import java.util.*;
 
-import com.whirlpool.isec.blinkytape.segments.Segment;
+import com.whirlpool.isec.blinkytape.data.Datum;
 
 public class MarkerRenderer extends AbstractRenderer {
   boolean wasOn = false;
@@ -22,8 +22,8 @@ public class MarkerRenderer extends AbstractRenderer {
   }
 
   @Override
-  public Segment createParametersInstance() {
-    return new Segment(getName());
+  public Datum createDatumInstance() {
+    return new Datum(getName());
   }
 
   @Override

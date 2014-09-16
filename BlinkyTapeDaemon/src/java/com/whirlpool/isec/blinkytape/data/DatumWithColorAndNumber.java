@@ -1,8 +1,8 @@
-package com.whirlpool.isec.blinkytape.segments;
+package com.whirlpool.isec.blinkytape.data;
 
-public class SegmentWithColorAndNumber extends SegmentWithColor implements IHasColorProperty, IHasNumericValueProperty {
+public class DatumWithColorAndNumber extends DatumWithColor implements IHasColorProperty, IHasNumericValueProperty {
   Double value = 0.0;
-  public SegmentWithColorAndNumber(String name) {
+  public DatumWithColorAndNumber(String name) {
     super (name);
   }
 

@@ -3,44 +3,56 @@
   "-//Apache Commons //DTD digester-rules XML V1.0//EN"
   "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
 <digester-rules>
-	<pattern value="config">
-		<set-properties-rule />
-    </pattern>
-    
-	<pattern value="config/tape">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.config.TapeConfig" />
-		<set-properties-rule />
-		<set-next-rule methodname="addTapeConfig" />
-	</pattern>
+ <pattern value="config">
+  <set-properties-rule />
+ </pattern>
 
-	<pattern value="*/local">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.tapes.LocalBlinkyTape" />
-  		<set-properties-rule />
-		<set-next-rule methodname="addTapeRenderer" />
-	</pattern>
+ <pattern value="config/tape">
+  <object-create-rule classname="com.whirlpool.isec.blinkytape.config.TapeConfig" />
+  <set-properties-rule />
+  <set-next-rule methodname="addTapeConfig" />
+ </pattern>
 
-	<pattern value="*/bar">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.BarRenderer" />
-		<set-properties-rule />
-		<set-next-rule methodname="addSegment" />
-	</pattern>
+ <pattern value="*/local">
+  <object-create-rule classname="com.whirlpool.isec.blinkytape.tapes.LocalBlinkyTape" />
+  <set-properties-rule />
+  <set-next-rule methodname="addTape" />
+ </pattern>
 
-	<pattern value="*/marker">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.MarkerRenderer" />
-		<set-properties-rule />
-		<set-next-rule methodname="addSegment" />
-	</pattern>
+ <pattern value="*/bar">
+  <object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.BarRenderer" />
+  <set-properties-rule />
+  <set-next-rule methodname="addRenderer" />
 
-	<pattern value="*/solid">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.SolidRenderer" />
-		<set-properties-rule />
-		<set-next-rule methodname="addSegment" />
-	</pattern>
+  <pattern value="colorMapper">
+   <object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.BarColorMapper" />
+   <set-properties-rule />
+   <set-next-rule methodname="setBarColorMapper" />
 
-	<pattern value="*/static">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.StaticRenderer" />
-		<set-properties-rule />
-		<set-next-rule methodname="addSegment" />
-	</pattern>
+   <pattern value="range">
+    <object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.BarColorMapperRange" />
+    <set-properties-rule />
+    <set-next-rule methodname="addRange" />
+   </pattern>
+  </pattern>
+ </pattern>
+
+ <pattern value="*/marker">
+  <object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.MarkerRenderer" />
+  <set-properties-rule />
+  <set-next-rule methodname="addRenderer" />
+ </pattern>
+
+ <pattern value="*/solid">
+  <object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.SolidRenderer" />
+  <set-properties-rule />
+  <set-next-rule methodname="addRenderer" />
+ </pattern>
+
+ <pattern value="*/static">
+  <object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.StaticRenderer" />
+  <set-properties-rule />
+  <set-next-rule methodname="addRenderer" />
+ </pattern>
 
 </digester-rules>

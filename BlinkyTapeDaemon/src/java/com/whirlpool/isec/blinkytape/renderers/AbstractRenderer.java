@@ -6,7 +6,7 @@ import java.util.List;
 import org.slf4j.*;
 
 import com.whirlpool.isec.blinkytape.config.Config;
-import com.whirlpool.isec.blinkytape.segments.Segment;
+import com.whirlpool.isec.blinkytape.data.Datum;
 
 abstract public class AbstractRenderer {
   private static Logger staticLogger = LoggerFactory.getLogger(AbstractRenderer.class);
@@ -24,7 +24,7 @@ abstract public class AbstractRenderer {
     logger = staticLogger;
   }
 
-  abstract public Segment createParametersInstance();
+  abstract public Datum createDatumInstance();
 
   final public String getName() {
     return name;
@@ -41,6 +41,9 @@ abstract public class AbstractRenderer {
 
   public void setLength(Integer length) {
     this.length = length;
+  }
+  
+  public void postConfig() {
   }
 
   abstract public List<Color> getLeds();
@@ -62,7 +65,7 @@ abstract public class AbstractRenderer {
   }
 
   public long getLastChangedAt() {
-    long rv = Config.getInstance().getSegmentValue(getName()).getLastChangedAt();
+    long rv = Config.getInstance().getDatum(getName()).getLastChangedAt();
     markChanged();
     if (lastChangedAt > rv) rv = lastChangedAt;
     return lastChangedAt;

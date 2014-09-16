@@ -41,7 +41,7 @@
  </logger>
 
  <logger name="com.whirlpool.isec.blinkytape.Tape.Timing">
-  <level value="DEBUG"></level>
+  <level value="INFo"></level>
  </logger>
 
  <logger name="com.whirlpool.isec.blinkytape.serial">

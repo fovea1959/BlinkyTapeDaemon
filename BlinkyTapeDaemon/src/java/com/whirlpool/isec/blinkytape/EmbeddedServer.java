@@ -146,18 +146,16 @@ public class EmbeddedServer {
     digester.push(config);
     digester.parse(new File("config.xml"));
 
-    config.postParse();
+    config.postConfig();
 
     System.out.println(config);
 
   }
 
   static class MyRulesModule extends FromXmlRulesModule {
-
     @Override
     protected void loadRules() {
       loadXMLRules(EmbeddedServer.class.getResourceAsStream("/config-rules.xml"));
     }
-
   }
 }

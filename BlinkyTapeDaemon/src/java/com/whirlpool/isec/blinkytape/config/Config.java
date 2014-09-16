@@ -2,14 +2,14 @@ package com.whirlpool.isec.blinkytape.config;
 
 import java.util.*;
 
+import com.whirlpool.isec.blinkytape.data.Datum;
 import com.whirlpool.isec.blinkytape.renderers.AbstractRenderer;
-import com.whirlpool.isec.blinkytape.segments.Segment;
 
 public class Config {
 
   private List<TapeConfig> tapeConfigs = new ArrayList<TapeConfig>();
 
-  private Map<String, Segment> segmentValues = new HashMap<String, Segment>();
+  private Map<String, Datum> data = new HashMap<String, Datum>();
 
   private boolean shutdownRequested = false;
 
@@ -30,21 +30,22 @@ public class Config {
     return tapeConfigs;
   }
 
-  public void postParse() {
+  public void postConfig() {
     for (TapeConfig tapeconfig : tapeConfigs) {
-      for (AbstractRenderer segment : tapeconfig.getSegments()) {
-        String name = segment.getName();
+      for (AbstractRenderer renderer : tapeconfig.getRenderers()) {
+        String name = renderer.getName();
         if (name != null) {
-          if (segmentValues.get(name) == null) {
-            segmentValues.put(segment.getName(), segment.createParametersInstance());
+          if (data.get(name) == null) {
+            data.put(renderer.getName(), renderer.createDatumInstance());
           }
         }
+        renderer.postConfig();
       }
     }
   }
 
-  public Segment getSegmentValue(String s) {
-    return segmentValues.get(s);
+  public Datum getDatum(String s) {
+    return data.get(s);
   }
 
   @Override

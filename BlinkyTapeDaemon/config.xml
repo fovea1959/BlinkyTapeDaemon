@@ -5,17 +5,25 @@
   <local reverse="true" />
 
   <marker colorOff="#000010" colorOn="black" />
-  <bar name="prod_new_rt" color="#004040" length="20"/>
+  <bar name="prod_new_rt" color="#ffffff" length="20" max="20">
+   <colorMapper zebra="true">
+    <range limit="10" color="#001020" />
+    <range limit="20" color="#200808" />
+   </colorMapper>
+  </bar>
   <marker colorOff="#000010" colorOn="black" />
-  <bar name="wegscd-linux-cpu" color="#404000" length="10" max="100" />
+  <bar name="wegscd-linux-cpu" color="#201010" length="10" max="100" />
   <marker colorOff="#000010" colorOn="black" />
-  <bar name="adculsplunkp1-cpu" color="#404000" length="10" max="100" round="false" />
+  <bar name="adculsplunkp1-cpu" color="#102010" length="10" max="100" round="false" />
   <marker colorOff="#000010" colorOn="black" />
   <bar name="a" length="3" color="blue" />
   <marker colorOff="#000010" colorOn="black" />
   <bar name="b" length="3" />
   <marker colorOff="#000010" colorOn="black" />
-  <static length="5" />
+  <static length="1" color="#101010" />
+  <static length="1" color="#100000" />
+  <static length="1" color="#001000" />
+  <static length="1" color="#000010" />
   <!-- gotta be a little funny -->
   <marker colorOn="#000800" colorOff="#080000" period="1000" duty="0.5" />
  </tape>

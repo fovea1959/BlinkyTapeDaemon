@@ -1,9 +1,9 @@
-package com.whirlpool.isec.blinkytape.segments;
+package com.whirlpool.isec.blinkytape.data;
 
 import java.awt.Color;
 
-public class SegmentWithColor extends Segment implements IHasColorProperty {
-  public SegmentWithColor(String name) {
+public class DatumWithColor extends Datum implements IHasColorProperty {
+  public DatumWithColor(String name) {
     super(name);
   }
   Color color = Color.WHITE;

@@ -1,4 +1,4 @@
-package com.whirlpool.isec.blinkytape.segments;
+package com.whirlpool.isec.blinkytape.data;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.ws.rs.core.MultivaluedMap;
@@ -7,17 +7,17 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.slf4j.*;
 
-public class Segment {
-  static Logger staticLogger = LoggerFactory.getLogger(Segment.class);
+public class Datum {
+  static Logger staticLogger = LoggerFactory.getLogger(Datum.class);
   Logger logger = null;
   
   private long lastChangedAt = 0;
   
   private String name;
   
-  public Segment (String name) {
+  public Datum (String name) {
     this.name = name;
-    logger = LoggerFactory.getLogger(Segment.class.getName() + "." + name);
+    logger = LoggerFactory.getLogger(Datum.class.getName() + "." + name);
   }
   
   public String getName() {

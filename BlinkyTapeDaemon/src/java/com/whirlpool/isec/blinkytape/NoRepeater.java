@@ -1,4 +1,4 @@
-package com.whirlpool.isec.blinkytape.rest;
+package com.whirlpool.isec.blinkytape;
 
 import java.util.*;
 

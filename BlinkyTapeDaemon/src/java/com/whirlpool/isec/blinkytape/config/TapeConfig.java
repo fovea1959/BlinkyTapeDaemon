@@ -9,12 +9,12 @@ import com.whirlpool.isec.blinkytape.tapes.ITape;
 public class TapeConfig {
   private String name;
 
-  private List<ITape> tapeRenderers = new ArrayList<ITape>();
+  private List<ITape> tapes = new ArrayList<ITape>();
 
-  private List<AbstractRenderer> segments = new ArrayList<AbstractRenderer>();
+  private List<AbstractRenderer> renderers = new ArrayList<AbstractRenderer>();
 
-  public List<AbstractRenderer> getSegments() {
-    return segments;
+  public List<AbstractRenderer> getRenderers() {
+    return renderers;
   }
   
   public String getName() {
@@ -25,21 +25,21 @@ public class TapeConfig {
     this.name = name;
   }
 
-  public void addSegment(AbstractRenderer segment) {
-    segments.add(segment);
+  public void addRenderer(AbstractRenderer renderer) {
+    renderers.add(renderer);
   }
   
-  public void addTapeRenderer(ITape tapeRenderer) {
-    tapeRenderers.add(tapeRenderer);
+  public void addTape(ITape iTape) {
+    tapes.add(iTape);
   }
 
-  public List<ITape> getTapeRenderers() {
-    return tapeRenderers;
+  public List<ITape> getTapes() {
+    return tapes;
   }
 
   @Override
   public String toString() {
-    return String.format("TapeConfig [name=%s, segments=%s]", name, segments);
+    return String.format("TapeConfig [name=%s, renderers=%s]", name, renderers);
   }
 
 }

@@ -1,4 +1,4 @@
-package com.whirlpool.isec.blinkytape.segments;
+package com.whirlpool.isec.blinkytape.data;
 
 import java.awt.Color;
 
