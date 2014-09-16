@@ -1,4 +1,4 @@
-package com.whirlpool.isec.blinkytape.taperenderers;
+package com.whirlpool.isec.blinkytape.tapes;
 
 import java.awt.Color;
 
@@ -10,7 +10,7 @@ import com.whirlpool.isec.blinkytape.serial.BTSerial;
 import com.whirlpool.isec.blinkytape.serial.BTSerialException;
 import com.whirlpool.isec.blinkytape.serial.BTSerialJssc;
 
-public class LocalBlinkyTape implements ITapeRenderer {
+public class LocalBlinkyTape implements ITape {
   static Logger logger = LoggerFactory.getLogger(LocalBlinkyTape.class);
   private BTSerial btSerial;
   

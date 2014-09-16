@@ -1,8 +1,8 @@
-package com.whirlpool.isec.blinkytape.taperenderers;
+package com.whirlpool.isec.blinkytape.tapes;
 
 import java.awt.Color;
 
-public interface ITapeRenderer {
+public interface ITape {
   public void update (Color[] leds);
   public void close();
 }

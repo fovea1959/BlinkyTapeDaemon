@@ -1,10 +1,10 @@
-package com.whirlpool.isec.blinkytape.segmentrenderers;
+package com.whirlpool.isec.blinkytape.segments;
 
 import java.awt.Color;
 
-public class SegmentSolidParameters extends SegmentParameters<SegmentSolid> {
-  public SegmentSolidParameters(SegmentSolid segmentSolid) {
-    super(segmentSolid);
+public class SegmentWithColor extends Segment implements IHasColorProperty {
+  public SegmentWithColor(String name) {
+    super(name);
   }
   Color color = Color.WHITE;
 

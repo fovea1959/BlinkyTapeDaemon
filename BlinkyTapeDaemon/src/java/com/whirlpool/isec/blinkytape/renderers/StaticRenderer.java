@@ -1,33 +1,33 @@
-package com.whirlpool.isec.blinkytape.segmentrenderers;
+package com.whirlpool.isec.blinkytape.renderers;
 
 import java.awt.Color;
 import java.util.*;
 
-@SuppressWarnings("rawtypes")
-public class SegmentOfStatic extends Segment<SegmentParameters> {
-  long lastUpdate = 0;
+import com.whirlpool.isec.blinkytape.segments.Segment;
+
+public class StaticRenderer extends AbstractRenderer {
+  long staticWasLastChanged = 0;
   static private Random random = new Random();
   
-  public SegmentOfStatic() {
+  public StaticRenderer() {
     super();
     setName(this.toString());
     super.setLength(1);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
-  SegmentParameters createParametersInstance() {
-    return new SegmentParameters(this);
+  public Segment createParametersInstance() {
+    return new Segment(getName());
   }
 
   @Override
   public void gazeAtMyNavelAmIReallyCurrent() {
     long now = System.currentTimeMillis();
-    if (now - lastUpdate > 200) {
+    if (now - staticWasLastChanged > 200) {
       markChanged(now);
     }
   }
-
+  
   @Override
   public List<Color> getLeds() {
     List<Color> rv = new ArrayList<Color>(getLength());

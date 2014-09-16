@@ -1,11 +1,10 @@
-package com.whirlpool.isec.blinkytape.segmentrenderers;
+package com.whirlpool.isec.blinkytape.segments;
 
-public class SegmentBarParameters extends SegmentSolidParameters {
-  public SegmentBarParameters(SegmentBar segmentBar) {
-    super (segmentBar);
-  }
-
+public class SegmentWithColorAndNumber extends SegmentWithColor implements IHasColorProperty, IHasNumericValueProperty {
   Double value = 0.0;
+  public SegmentWithColorAndNumber(String name) {
+    super (name);
+  }
 
   public Double getValue() {
     return value;

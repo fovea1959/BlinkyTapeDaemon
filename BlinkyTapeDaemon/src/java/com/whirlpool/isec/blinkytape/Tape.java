@@ -7,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.whirlpool.isec.blinkytape.config.TapeConfig;
-import com.whirlpool.isec.blinkytape.segmentrenderers.Segment;
+import com.whirlpool.isec.blinkytape.renderers.AbstractRenderer;
 import com.whirlpool.isec.blinkytape.serial.BTSerialException;
-import com.whirlpool.isec.blinkytape.taperenderers.ITapeRenderer;
+import com.whirlpool.isec.blinkytape.tapes.ITape;
 
 public class Tape implements Runnable {
   static Logger logger = LoggerFactory.getLogger(Tape.class);
@@ -42,9 +42,9 @@ public class Tape implements Runnable {
         boolean needToUpdateTheTape = false;
         int i = 0;
 
-        for (Segment<?> segment : getTapeConfig().getSegments()) {
+        for (AbstractRenderer segment : getTapeConfig().getSegments()) {
           boolean thisSegmentIsDirty = false;
-          long timeOfLastSegmentUpdate = segment.getLastTimeUpdated();
+          long timeOfLastSegmentUpdate = segment.getLastChangedAt();
           if (timeOfLastSegmentUpdate > timeOfLastTapeUpdate) {
             thisSegmentIsDirty = true;
             needToUpdateTheTape = true;
@@ -65,7 +65,7 @@ public class Tape implements Runnable {
           needToUpdateTheTape = true;
         }
         if (needToUpdateTheTape) {
-          for (ITapeRenderer iTapeRenderer : tapeConfig.getTapeRenderers()) {
+          for (ITape iTapeRenderer : tapeConfig.getTapeRenderers()) {
             iTapeRenderer.update(leds);
           }
         }
@@ -103,7 +103,7 @@ public class Tape implements Runnable {
   }
   
   public void close() {
-    for (ITapeRenderer iTapeRenderer : tapeConfig.getTapeRenderers()) {
+    for (ITape iTapeRenderer : tapeConfig.getTapeRenderers()) {
       iTapeRenderer.close();
     }
   }

@@ -2,15 +2,15 @@ package com.whirlpool.isec.blinkytape.config;
 
 import java.util.*;
 
-import com.whirlpool.isec.blinkytape.segmentrenderers.Segment;
+import com.whirlpool.isec.blinkytape.renderers.AbstractRenderer;
+import com.whirlpool.isec.blinkytape.segments.Segment;
 
 public class Config {
 
   private List<TapeConfig> tapeConfigs = new ArrayList<TapeConfig>();
 
-  @SuppressWarnings("rawtypes")
-  private Map<String, Segment> namedSegments = new HashMap<String, Segment>();
-  
+  private Map<String, Segment> segmentValues = new HashMap<String, Segment>();
+
   private boolean shutdownRequested = false;
 
   static private Config instance = new Config();
@@ -32,17 +32,19 @@ public class Config {
 
   public void postParse() {
     for (TapeConfig tapeconfig : tapeConfigs) {
-      for (@SuppressWarnings("rawtypes")
-      Segment segment : tapeconfig.getSegments()) {
-        if (segment.getName() != null)
-          namedSegments.put(segment.getName(), segment);
+      for (AbstractRenderer segment : tapeconfig.getSegments()) {
+        String name = segment.getName();
+        if (name != null) {
+          if (segmentValues.get(name) == null) {
+            segmentValues.put(segment.getName(), segment.createParametersInstance());
+          }
+        }
       }
     }
   }
 
-  @SuppressWarnings("rawtypes")
-  public Segment getNamedSegment(String s) {
-    return namedSegments.get(s);
+  public Segment getSegmentValue(String s) {
+    return segmentValues.get(s);
   }
 
   @Override

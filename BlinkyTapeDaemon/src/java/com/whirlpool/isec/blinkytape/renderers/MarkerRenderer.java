@@ -1,10 +1,11 @@
-package com.whirlpool.isec.blinkytape.segmentrenderers;
+package com.whirlpool.isec.blinkytape.renderers;
 
 import java.awt.Color;
 import java.util.*;
 
-@SuppressWarnings("rawtypes")
-public class Marker extends Segment<SegmentParameters> {
+import com.whirlpool.isec.blinkytape.segments.Segment;
+
+public class MarkerRenderer extends AbstractRenderer {
   boolean wasOn = false;
   
   private long period = 2000;
@@ -14,15 +15,15 @@ public class Marker extends Segment<SegmentParameters> {
 
   Color colorOff = Color.BLACK;
 
-  public Marker() {
+  public MarkerRenderer() {
     super();
     setName(this.toString());
     super.setLength(1);
   }
 
   @Override
-  MarkerParameters createParametersInstance() {
-    return new MarkerParameters(this);
+  public Segment createParametersInstance() {
+    return new Segment(getName());
   }
 
   @Override

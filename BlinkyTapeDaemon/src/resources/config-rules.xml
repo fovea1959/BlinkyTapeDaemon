@@ -14,31 +14,31 @@
 	</pattern>
 
 	<pattern value="*/local">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.taperenderers.LocalBlinkyTape" />
-		<set-properties-rule />
+		<object-create-rule classname="com.whirlpool.isec.blinkytape.tapes.LocalBlinkyTape" />
+  		<set-properties-rule />
 		<set-next-rule methodname="addTapeRenderer" />
 	</pattern>
 
 	<pattern value="*/bar">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.segmentrenderers.SegmentBar" />
+		<object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.BarRenderer" />
 		<set-properties-rule />
 		<set-next-rule methodname="addSegment" />
 	</pattern>
 
 	<pattern value="*/marker">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.segmentrenderers.Marker" />
+		<object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.MarkerRenderer" />
 		<set-properties-rule />
 		<set-next-rule methodname="addSegment" />
 	</pattern>
 
 	<pattern value="*/solid">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.segmentrenderers.SegmentSolid" />
+		<object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.SolidRenderer" />
 		<set-properties-rule />
 		<set-next-rule methodname="addSegment" />
 	</pattern>
 
 	<pattern value="*/static">
-		<object-create-rule classname="com.whirlpool.isec.blinkytape.segmentrenderers.SegmentOfStatic" />
+		<object-create-rule classname="com.whirlpool.isec.blinkytape.renderers.StaticRenderer" />
 		<set-properties-rule />
 		<set-next-rule methodname="addSegment" />
 	</pattern>

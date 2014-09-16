@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.whirlpool.isec.blinkytape.Util;
 import com.whirlpool.isec.blinkytape.config.Config;
 import com.whirlpool.isec.blinkytape.rest.NoRepeater.NoRepeaterResult;
-import com.whirlpool.isec.blinkytape.segmentrenderers.Segment;
+import com.whirlpool.isec.blinkytape.segments.Segment;
 
 @Path("/segment/{s}")
 public class SegmentService {
@@ -38,8 +38,8 @@ public class SegmentService {
     Util.setupConverters();
     String remoteHost = h.getRemoteHost();
     logger.debug("from={}, s={}, qp={}", s, m);
-    Segment<?> segment = Config.getInstance().getNamedSegment(s);
-    if (segment == null) {
+    Segment segmentValue = Config.getInstance().getSegmentValue(s);
+    if (segmentValue == null) {
       // logger.error("Test: unable to find segment {}", s);
       NoRepeaterResult r = noRepeater.somethingHappened(s + "@" + remoteHost);
       if (r != null) {
@@ -47,7 +47,7 @@ public class SegmentService {
       }
       throw new WebApplicationException("Cannot find '" + s + "'", 400);
     }
-    segment.setValues(m);
-    return "<segment>" + segment.getParameters() + "</segment>";
+    segmentValue.setValues(m);
+    return "<segment>" + segmentValue.toString() + "</segment>";
   }
 }
