@@ -53,10 +53,19 @@ abstract public class AbstractRenderer {
   
   @Override
   public String toString() {
-    return "AbstractRenderer [" + (logger != null ? "logger=" + logger + ", " : "")
-        + (name != null ? "name=" + name + ", " : "")
-        + (length != null ? "length=" + length + ", " : "") + "lastChangedAt="
-        + lastChangedAt + "]";
+    StringBuilder builder = new StringBuilder();
+    builder.append("AbstractRenderer [");
+    if (name != null) {
+      builder.append("name=");
+      builder.append(name);
+      builder.append(", ");
+    }
+    if (length != null) {
+      builder.append("length=");
+      builder.append(length);
+    }
+    builder.append("]");
+    return builder.toString();
   }
   
   public void markChanged() {

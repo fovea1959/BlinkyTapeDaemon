@@ -1,0 +1,52 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="BlinkyTapeDaemon" default="build">
+
+	<property name="src.dir" location="src" />
+	<property name="dist.dir" location="dist" />
+	<property name="dist.jar" location="${dist.dir}/${ant.project.name}.jar" />
+	<property name="dist.main.class" value="com.whirlpool.isec.blinkytape.EmbeddedServer" />
+
+	<target name="build">
+		<delete>
+		  <fileset dir="${dist.dir}" includes="**/*"/>
+		</delete>
+		
+		<mkdir dir="${dist.dir}/lib"/>
+		
+		<copy todir="${dist.dir}" file="config.xml"/>
+		
+		<ivy:retrieve pattern="${dist.dir}/lib/[artifact]-[revision].[ext]" conf="runtime" />
+
+		<echo>Classpath is ${runtime.path.prop}</echo>
+
+		<path id="dep.runtime">
+			<fileset dir="${dist.dir}/lib">
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+		<property name="dep.classpath" value="${toString:dep.runtime}" />
+		<echo message="dep.classpath = ${toString:dep.runtime}"/>
+		
+		<pathconvert property="manifest.classpath" pathsep=" ">
+		  <path refid="dep.runtime"/>
+		  <mapper>
+		    <chainedmapper>
+		       <flattenmapper/>
+		       <globmapper from="*.jar" to="lib/*.jar"/>
+		    </chainedmapper>
+		  </mapper>
+		</pathconvert>
+		<echo message="manifest classpath = ${manifest.classpath}"/>
+
+		<jar destfile="${dist.jar}" basedir="bin">
+			<manifest>
+				<attribute name="Main-Class" value="${dist.main.class}" />
+				<attribute name="Class-Path" value="${manifest.classpath}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="clean">
+		<delete dir="${dist.dir}" />
+	</target>
+
+</project>
