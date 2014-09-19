@@ -26,7 +26,7 @@ public class TcpServer implements Runnable {
     if (boom != null)
       boom.printStackTrace();
   }
-  
+
   Logger logger = LoggerFactory.getLogger(getClass());
 
   private Vector<Connection> connectiontable = new Vector<Connection>();
@@ -44,14 +44,8 @@ public class TcpServer implements Runnable {
   public void run() {
     try {
       ss = new ServerSocket(port);
-      ss.setSoTimeout(100);
       while (!dieFlag) {
-        Socket s = null;
-        try {
-          s = ss.accept();
-        } catch (InterruptedIOException ex) {
-          // the accept timed out
-        }
+        Socket s = ss.accept();
         if (dieFlag)
           break;
         if (s != null) {
@@ -62,10 +56,13 @@ public class TcpServer implements Runnable {
           current.setDaemon(true);
           connectiontable.addElement(c);
           current.start();
+        } else {
+          logger.error("huh. got a null Socket from the accept.");
         }
       }
     } catch (Exception e) {
-      System.out.println(e);
+      if (!dieFlag)
+        logger.error("accept loop died!", e);
     } finally {
       if (ss != null) {
         try {
@@ -74,8 +71,6 @@ public class TcpServer implements Runnable {
         }
       }
     }
-
-    // should add finally block to close down
   }
 
   public void setDieFlag() {
@@ -121,7 +116,7 @@ public class TcpServer implements Runnable {
           long now = System.currentTimeMillis();
           if (in.ready()) {
             String clientSentence = in.readLine();
-            logger.info ("received {}", clientSentence);
+            logger.info("received {}", clientSentence);
             String result = process(clientSentence);
             out.println(result);
             out.flush();
@@ -132,7 +127,7 @@ public class TcpServer implements Runnable {
             }
           }
           if (now - last > 1000) {
-            out.println (new Date(now));
+            out.println(new Date(now));
             out.flush();
             last = now;
           }

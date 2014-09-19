@@ -1,11 +1,27 @@
 <project xmlns:ivy="antlib:org.apache.ivy.ant" name="BlinkyTapeDaemon" default="build">
 
 	<property name="src.dir" location="src" />
+	<property name="build.dir" location="build"/>	
 	<property name="dist.dir" location="dist" />
-	<property name="dist.jar" location="${dist.dir}/${ant.project.name}.jar" />
 	<property name="dist.main.class" value="com.whirlpool.isec.blinkytape.EmbeddedServer" />
+	
+	<property name="dist.jar" location="${dist.dir}/${ant.project.name}.jar" />
+	<property name="classes.dir" location="${build.dir}/classes"/>	
+	
+	  <target name="compile">
+	    <ivy:resolve/>
+	    <ivy:cachepath pathid="build.path" conf="build"/>
 
-	<target name="build">
+	  	<mkdir dir="${classes.dir}"/>
+		<delete>
+		  <fileset dir="${build.dir}/classes" includes="**/*"/>
+		</delete>
+
+	    <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="build.path"/>
+	  </target>
+
+
+	<target name="build" depends="compile">
 		<delete>
 		  <fileset dir="${dist.dir}" includes="**/*"/>
 		</delete>
@@ -37,7 +53,7 @@
 		</pathconvert>
 		<echo message="manifest classpath = ${manifest.classpath}"/>
 
-		<jar destfile="${dist.jar}" basedir="bin">
+		<jar destfile="${dist.jar}" basedir="${classes.dir}">
 			<manifest>
 				<attribute name="Main-Class" value="${dist.main.class}" />
 				<attribute name="Class-Path" value="${manifest.classpath}" />
