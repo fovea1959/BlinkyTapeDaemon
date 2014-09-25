@@ -12,17 +12,7 @@
    </colorMapper>
   </bar>
 
-  <marker colorOff="#080808" colorOn="black" />
-
-  <bar name="wegscd-linux-cpu" length="5" max="100">
-   <colorMapper>
-    <range upperLimit="70" color="#101010" />
-    <range upperLimit="90" color="#202000" />
-    <range color="#300000" />
-   </colorMapper>
-  </bar>
-
-  <marker colorOff="#080808" colorOn="black" />
+  <marker colorOff="#000008" colorOn="black" />
 
   <bar name="adculsplunkp1-cpu" length="10" max="100">
    <colorMapper>
@@ -32,7 +22,7 @@
    </colorMapper>
   </bar>
 
-  <marker colorOff="#080808" colorOn="black" />
+  <marker colorOff="#000008" colorOn="black" />
 
   <bar name="test" length="5" max="100">
    <colorMapper>
@@ -42,11 +32,21 @@
    </colorMapper>
   </bar>
 
-  <marker colorOff="#080808" colorOn="black" />
+  <marker colorOff="#000008" colorOn="black" />
 
   <bar name="b" length="3" />
 
-  <marker colorOff="#080808" colorOn="black" />
+  <marker colorOff="#000008" colorOn="black" />
+
+  <bar name="wegscd-linux-cpu" length="5" max="100">
+   <colorMapper>
+    <range upperLimit="70" color="#101010" />
+    <range upperLimit="90" color="#202000" />
+    <range color="#300000" />
+   </colorMapper>
+  </bar>
+
+  <marker colorOff="#000008" colorOn="black" />
 
   <static length="1" color="#101010" />
   <static length="1" color="#100000" />

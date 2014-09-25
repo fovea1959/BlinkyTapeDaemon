@@ -1,31 +1,17 @@
 package com.whirlpool.isec.blinkytape;
 
 import java.net.*;
+import java.awt.Color;
 import java.io.*;
 import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TcpServer implements Runnable {
+import com.whirlpool.isec.blinkytape.config.Config;
+import com.whirlpool.isec.blinkytape.tapes.ITape;
 
-  public static void main(String[] args) {
-    Exception boom = null;
-    try {
-      TcpServer tcpServer = new TcpServer(1357);
-      Thread thread = new Thread(tcpServer);
-      thread.start();
-      try {
-        Thread.sleep(60000);
-      } catch (InterruptedException ex) {
-      }
-      tcpServer.setDieFlag();
-    } catch (Exception ex) {
-      boom = ex;
-    }
-    if (boom != null)
-      boom.printStackTrace();
-  }
+public class TcpServer implements Runnable {
 
   Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -82,7 +68,7 @@ public class TcpServer implements Runnable {
     }
   }
 
-  class Connection implements Runnable {
+  class Connection implements Runnable, ITape {
     Socket linkto; // the socket
 
     PrintWriter out; // the output and input streams
@@ -104,8 +90,20 @@ public class TcpServer implements Runnable {
       }
     }
 
-    String process(String request) {
-      return request.toUpperCase();
+    void process(String request) {
+      if (request.equalsIgnoreCase("q")) {
+        out.println ("dying");
+        connectionDieFlag = true;
+      }
+      if (request.equalsIgnoreCase("c")) {
+        out.println ("connecting");
+        Config.getInstance().getTapeConfigs().get(0).addTape(this);
+      }
+      if (request.equalsIgnoreCase("d")) {
+        out.println ("disconnecting");
+        Config.getInstance().getTapeConfigs().get(0).removeTape(this);
+      }
+      out.flush();
     }
 
     public void run() {
@@ -116,10 +114,8 @@ public class TcpServer implements Runnable {
           long now = System.currentTimeMillis();
           if (in.ready()) {
             String clientSentence = in.readLine();
+            process(clientSentence);
             logger.info("received {}", clientSentence);
-            String result = process(clientSentence);
-            out.println(result);
-            out.flush();
           } else {
             try {
               Thread.sleep(100);
@@ -140,6 +136,9 @@ public class TcpServer implements Runnable {
         ex.printStackTrace();
       } finally {
         logger.info("ending connection {}", from_name);
+        
+        Config.getInstance().getTapeConfigs().get(0).removeTape(this);
+        
         connectiontable.removeElement(this);
         try {
           out.close(); // closes needed to terminate connection
@@ -154,6 +153,27 @@ public class TcpServer implements Runnable {
         } catch (Exception e) {
         }
       }
+    }
+    
+    StringBuffer sb = new StringBuffer();
+
+    @Override
+    public void update(Color[] leds) {
+      logger.info("updating LEDS");
+      sb.setLength(0);
+      sb.append("leds");
+      for (Color c : leds) {
+        sb.append(",");
+        sb.append (Util.colorToHex(c));
+      }
+      out.println(sb.toString());
+      out.flush();
+    }
+
+    @Override
+    public void close() {
+      // TODO Auto-generated method stub
+      
     }
   }
 }

@@ -115,10 +115,12 @@ public class EmbeddedServer {
     // get moved to AbstractTape?
 
     Tape tape = new Tape(tapeConfig);
-
     Thread tapeThread = new Thread(tape);
-
     tapeThread.start();
+    
+    TcpServer tcpServer = new TcpServer(1357);
+    Thread tcpThread = new Thread(tcpServer);
+    tcpThread.start();
 
     while (!config.isShutdownRequested()) {
       // TODO figure out shutdown here
@@ -130,8 +132,11 @@ public class EmbeddedServer {
     }
 
     tape.setDieFlag(true);
+    tcpServer.setDieFlag();
+    
     tapeThread.join();
-    tape.close();
+    tcpThread.join();
+    
     server.stop();
     server.join();
   }

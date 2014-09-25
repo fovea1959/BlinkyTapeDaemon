@@ -33,6 +33,10 @@ public class TapeConfig {
     tapes.add(iTape);
   }
 
+  public void removeTape(ITape iTape) {
+    tapes.remove(iTape);
+  }
+
   public List<ITape> getTapes() {
     return tapes;
   }

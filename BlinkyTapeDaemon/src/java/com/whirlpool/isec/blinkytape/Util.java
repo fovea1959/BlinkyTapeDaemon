@@ -74,7 +74,7 @@ public class Util {
         }
       }
     }
-    
+
     @Override
     public String toString() {
       return "ColorParam[r=" + getRed() + ",g=" + getGreen() + ",b=" + getBlue() + "]";
@@ -82,6 +82,20 @@ public class Util {
   }
 
   final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
+
+  public static String colorToHex(Color c) {
+    char[] hexChars = new char[6];
+    int v = c.getRed();
+    hexChars[0] = hexArray[v >>> 4];
+    hexChars[1] = hexArray[v & 0x0F];
+    v = c.getGreen();
+    hexChars[2] = hexArray[v >>> 4];
+    hexChars[3] = hexArray[v & 0x0F];
+    v = c.getBlue();
+    hexChars[4] = hexArray[v >>> 4];
+    hexChars[5] = hexArray[v & 0x0F];
+    return new String(hexChars);
+  }
 
   public static String bytesToHex(byte[] bytes) {
     char[] hexChars = new char[bytes.length * 2];

@@ -14,6 +14,7 @@ import com.whirlpool.isec.blinkytape.tapes.ITape;
 
 public class Tape implements Runnable {
   static Logger logger = LoggerFactory.getLogger(Tape.class);
+
   static Logger timingLogger = LoggerFactory.getLogger(Tape.class.getName() + ".Timing");
 
   private final int length = 60;
@@ -21,7 +22,7 @@ public class Tape implements Runnable {
   private String name = null;
 
   private TapeConfig tapeConfig;
-  
+
   Color[] leds = new Color[length];
 
   public Tape(TapeConfig tapeConfig) {
@@ -87,17 +88,21 @@ public class Tape implements Runnable {
             Thread.sleep(tSleepWanted);
             long t11 = System.currentTimeMillis();
             tSlept = t11 - t10;
-            
+
             if (tSlept > tSleepWanted) {
               NoRepeaterResult rr = overSlept.somethingHappened("");
-              if (rr != null) logger.info (rr.message());
+              if (rr != null)
+                logger.info(rr.message());
             }
           }
         } catch (InterruptedException ex) {
           logger.warn("sleep interrupted");
         }
         long tfinal = System.currentTimeMillis();
-        if ((tfinal - t0) > (delay * 1.1)) timingLogger.debug("this loop took {}, eval {}, update {}, slept {} (wanted {})", tfinal - t0, tAtEvaluation - t0, tAfterUpdate - tAtEvaluation, tSlept, tSleepWanted);
+        if ((tfinal - t0) > (delay * 1.1))
+          timingLogger.debug(
+              "this loop took {}, eval {}, update {}, slept {} (wanted {})", tfinal - t0,
+              tAtEvaluation - t0, tAfterUpdate - tAtEvaluation, tSlept, tSleepWanted);
         if (dieFlag)
           break;
       }
@@ -105,14 +110,15 @@ public class Tape implements Runnable {
     } catch (BTSerialException ex) {
       ex.printStackTrace();
     } finally {
+      for (ITape iTape : tapeConfig.getTapes()) {
+        try {
+          iTape.close();
+        } catch (Exception e) {
+
+        }
+      }
     }
 
-  }
-  
-  public void close() {
-    for (ITape iTape : tapeConfig.getTapes()) {
-      iTape.close();
-    }
   }
 
   private boolean dieFlag = false;
@@ -134,11 +140,12 @@ public class Tape implements Runnable {
   public void setColor(int i, Color c) {
     leds[i] = c;
   }
-  
+
   public void clear() {
-    for (int i = 0; i < length; i++) leds[i] = Color.black;
+    for (int i = 0; i < length; i++)
+      leds[i] = Color.black;
   }
-  
+
   public int getLength() {
     return length;
   }
