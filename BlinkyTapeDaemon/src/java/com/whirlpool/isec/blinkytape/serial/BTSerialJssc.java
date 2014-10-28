@@ -18,6 +18,11 @@ public class BTSerialJssc extends BTSerial {
       logger.info("considering {}", name);
       if (name.matches("^COM1\\d$")) {
         portName = name;
+        break;
+      }
+      if (name.matches("^/dev/ttyACM\\d+$")) {
+        portName = name;
+        break;
       }
     }
     if (portName == null)
