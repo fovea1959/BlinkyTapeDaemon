@@ -32,6 +32,9 @@
 
   <copy todir="${dist.dir}" file="config.xml" />
 
+  <copy todir="${dist.dir}" file="BlinkyTapeDaemon.sh" />
+  <chmod file="${dist.dir}/BlinkyTapeDaemon.sh" perm="ugo+rx"/>
+
   <ivy:retrieve pattern="${dist.dir}/lib/[artifact]-[revision].[ext]" conf="runtime" />
 
   <echo>Classpath is ${runtime.path.prop}</echo>
