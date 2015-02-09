@@ -26,7 +26,7 @@
 
  <appender name="FILE" class="org.apache.log4j.RollingFileAppender">
   <param name="append" value="true" />
-  <param name="maxFileSize" value="100KB" />
+  <param name="maxFileSize" value="1000KB" />
   <param name="maxBackupIndex" value="5" />
   <param name="file" value="/tmp/BlinkyTapeDaemon.log" />
 
