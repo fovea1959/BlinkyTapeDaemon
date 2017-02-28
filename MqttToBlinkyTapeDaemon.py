@@ -7,6 +7,7 @@ import os               # Miscellaneous OS interfaces.
 import sys              # System-specific parameters and functions.
 import re
 import paho.mqtt.client as mqtt
+import Queue
 
 class AppException(Exception):
     def __init__(self, message, cause=None):
@@ -20,14 +21,14 @@ def createDaemon():
     try:
         pid = os.fork()
     except OSError, e:
-        raise Exception, "%s [%d]" % (e.strerror, e.errno)
+        raise Exception, '%s [%d]' % (e.strerror, e.errno)
 
     if (pid == 0):	# The first child.
         os.setsid()
         try:
             pid = os.fork()	# Fork a second child.
         except OSError, e:
-            raise Exception, "%s [%d]" % (e.strerror, e.errno)
+            raise Exception, '%s [%d]' % (e.strerror, e.errno)
 
         if (pid == 0):	# The second child.
             os.chdir('/')
@@ -54,31 +55,6 @@ def createDaemon():
 
     return(0)
 
-invalid_hosts = set()
-
-def send_to_blinky(name, value):
-    if name in invalid_hosts:
-        return
-
-    params = urllib.urlencode({ 'value': value, 'name': name})
-
-    try:
-        conn = httplib.HTTPConnection("wegscd-linux.whirlpool.com", 9999)
-        headers = {"Content-type": "application/x-www-form-urlencoded"}
-        url = "/rest/datum/{0}".format(name);
-        conn.request('POST', url, params, headers)
-        response = conn.getresponse()
-        if response.status == 200:
-            return True
-        else:
-            logging.warn ("post to %s did not work %d %s", url, response.status, response.reason)
-            if response.status == 400:
-                invalid_hosts.add(name)
-            return False
-        conn.close()
-    except (httplib.HTTPException, socket.error) as e:
-        logging.warn ("post to %s did not work: %s", url, e)
-        return False
 
 if __name__ == '__main__':
     import platform, time, httplib, urllib, socket, argparse, signal
@@ -99,7 +75,7 @@ if __name__ == '__main__':
         handler = logging.FileHandler(args.log, 'a')
         logging.root.addHandler(handler)
 
-    logging.info ("starting")
+    logging.info ('starting')
 
     if args.verbose > 1:
         httplib.HTTPConnection.debuglevel = 1
@@ -127,7 +103,7 @@ if __name__ == '__main__':
         if args.log:
             handler = logging.FileHandler(args.log, 'a')
             fmtstring = '%(asctime)s [%(process)d] ' + args.sid + ' %(levelname)s %(name)s %(message)s'
-            fmt = MyLoggingFormatter.MyLoggingFormatter (fmtstring, "%Y-%m-%dT%H:%M:%S%z")
+            fmt = MyLoggingFormatter.MyLoggingFormatter (fmtstring, '%Y-%m-%dT%H:%M:%S%z')
             handler.setFormatter(fmt)
             logging.root.addHandler(handler)
 
@@ -147,28 +123,60 @@ if __name__ == '__main__':
 
     signal.signal (signal.SIGTERM, sigterm_handler)
 
-
     mqtt_client = mqtt.Client()
 
     def on_message (client, userdata, msg):
         topic = msg.topic
         payload = str(msg.payload)
-        logging.debug ("topic: %s payload: %s", topic, payload)
         host = re.findall(r'splunk/hosts/(.*)/cpu', topic)
         if len(host) > 0:
             host = host[0]
-            logging.debug ("host: %s", host)
-            send_to_blinky (host + '-cpu', payload)
+            logging.debug ('topic: %s host: %s payload: %s', topic, host, payload)
+            q.put ({'name': host + '-cpu', 'value': payload})
+        else:
+            logging.warn ('unable to find host in topic %s', topic)
+
+    q = Queue.Queue()
 
     mqtt_client.on_message = on_message
-    mqtt_client.connect("wegscd-linux.whirlpool.com", 1883, 60)
-    mqtt_client.subscribe("splunk/hosts/+/cpu")
+    mqtt_client.connect('wegscd-linux.whirlpool.com', 1883, 60)
+    mqtt_client.subscribe('splunk/hosts/+/cpu')
+    mqtt_client.loop_start()
 
     while not exit_requested:
+        # do this here. if BlinkyTapeDaemon goes away, it may have gotten a new
+        # configuration, so ;et's send all information to it again until it
+        # gives us a 400 for a name
+        invalid_hosts = set()
+
         try:
-            logging.info ("hitting loop_forever()")
-            mqtt_client.loop_forever()
-            logging.warn ("left loop_forever()")
+            logging.info ('initiating HTTP connection')
+            conn = httplib.HTTPConnection('wegscd-linux.whirlpool.com', 9999)
+            headers = {'Content-type': 'application/x-www-form-urlencoded'}
+
+            while True: 
+                data_point = q.get()
+                name = data_point.get('name', None)
+                if name in invalid_hosts:
+                    continue
+                params = urllib.urlencode(data_point)
+                url = '/rest/datum/{0}'.format(name);
+                conn.request('POST', url, params, headers)
+                response = conn.getresponse()
+                response.read() # make sure we read all the content
+                if response.status == 200:
+                    pass
+                else:
+                    logging.warn ('post to %s did not work: %d %s', url, response.status, response.reason)
+                    if response.status == 400:
+                        # BlinkyTapeDaemon probably doesn't know about this datum
+                        invalid_hosts.add(name)
+
+        except (httplib.HTTPException, socket.error) as e:
+            logging.warn ('post to %s did not work: %s %s', url, type(e), e)
+
         except KeyboardInterrupt:
-            logging.warn ("got Keyboard interrupt")
+            logging.warn ('got Keyboard interrupt')
             exit_requested = True
+
+    mqtt_client.loop_stop()
